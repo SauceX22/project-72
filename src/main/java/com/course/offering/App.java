@@ -3,6 +3,7 @@ package com.course.offering;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -10,6 +11,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.skin.TableHeaderRow;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -18,10 +20,13 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
+import java.util.Date;
 
 public class App extends Application {
 
     private BorderPane root;
+    private VBox basketItemsContainer;
+    private TableView table;
 
     // Basics
     private Stage primaryStage;
@@ -34,20 +39,20 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
-
         initUi();
     }
 
     private void setupMainPane() {
         // Components smallest to largest
-        TableView table = new TableView<String>();
+        ScheduleController tableController = new ScheduleController();
+        table = tableController.initialize();
         AnchorPane mainPane = new AnchorPane(table);
 
-        createTableColumns(table);
+        tableController.addSection(new Section("ICS104", 1, new Date(), "#59-1013"));
 
-        TableRow<String> sevenAM = new TableRow<>();
+        // createTableColumns(table);
 
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        // TableRow<String> sevenAM = new TableRow<String>();
 
         // table.getItems().add(new String("Buggs"));
         // table.getItems().add(new String("Daffy", "Duck", 83));
@@ -75,34 +80,39 @@ public class App extends Application {
         // ageColumn.setCellValueFactory(new PropertyValueFactory<Person,
         // Integer>("age"));
 
-        TableColumn<String, String> sunday = new TableColumn<String, String>("Sunday");
-        sunday.setCellValueFactory(new PropertyValueFactory<String, String>("firstName"));
+        TableColumn<String, String> time = new TableColumn<String, String>("Time");
+        time.setMaxWidth(80);
+        time.setMinWidth(80);
+        time.setResizable(false);
 
-        TableColumn<String, String> monday = new TableColumn<String, String>("Monday");
-        monday.setCellValueFactory(new PropertyValueFactory<String, String>("lastName"));
+        TableColumn<Section, Node> sunday = new TableColumn<Section, Node>("Sunday");
+        sunday.setCellValueFactory(new PropertyValueFactory<Section, Node>("firstName"));
 
-        TableColumn<String, String> tuesday = new TableColumn<String, String>("Tuesday");
-        tuesday.setCellValueFactory(new PropertyValueFactory<String, String>("lastName"));
+        TableColumn<Section, Node> monday = new TableColumn<Section, Node>("Monday");
+        monday.setCellValueFactory(new PropertyValueFactory<Section, Node>("lastName"));
 
-        TableColumn<String, String> wednesday = new TableColumn<String, String>("Wednesday");
-        wednesday.setCellValueFactory(new PropertyValueFactory<String, String>("lastName"));
+        TableColumn<Section, Node> tuesday = new TableColumn<Section, Node>("Tuesday");
+        tuesday.setCellValueFactory(new PropertyValueFactory<Section, Node>("lastName"));
 
-        TableColumn<String, String> thursday = new TableColumn<String, String>("Thursday");
-        thursday.setCellValueFactory(new PropertyValueFactory<String, String>("lastName"));
+        TableColumn<Section, Node> wednesday = new TableColumn<Section, Node>("Wednesday");
+        wednesday.setCellValueFactory(new PropertyValueFactory<Section, Node>("lastName"));
 
-        TableColumn<String, String> friday = new TableColumn<String, String>("Friday");
-        friday.setCellValueFactory(new PropertyValueFactory<String, String>("lastName"));
+        TableColumn<Section, Node> thursday = new TableColumn<Section, Node>("Thursday");
+        thursday.setCellValueFactory(new PropertyValueFactory<Section, Node>("lastName"));
 
-        TableColumn<String, String> saturday = new TableColumn<String, String>("Saturday");
-        saturday.setCellValueFactory(new PropertyValueFactory<String, String>("lastName"));
+        // TableColumn<String, String> friday = new TableColumn<String,
+        // String>("Friday");
+        // friday.setCellValueFactory(new PropertyValueFactory<String,
+        // String>("lastName"));
 
-        table.getColumns().add(sunday);
-        table.getColumns().add(monday);
-        table.getColumns().add(tuesday);
-        table.getColumns().add(wednesday);
-        table.getColumns().add(thursday);
-        table.getColumns().add(friday);
-        table.getColumns().add(saturday);
+        // TableColumn<String, String> saturday = new TableColumn<String,
+        // String>("Saturday");
+        // saturday.setCellValueFactory(new PropertyValueFactory<String,
+        // String>("lastName"));
+
+        table.getColumns().addAll(time, sunday, monday, tuesday, wednesday, thursday);
+        // table.getColumns().add(friday);
+        // table.getColumns().add(saturday);
     }
 
     private void setupBottomPane() {
@@ -139,7 +149,7 @@ public class App extends Application {
 
     private void setupBasketPane() {
         // Adding components, smallest to largest
-        VBox basketItemsContainer = new VBox();
+        basketItemsContainer = new VBox();
         ScrollPane scrollPane = new ScrollPane(basketItemsContainer);
         AnchorPane anchorPane = new AnchorPane(scrollPane);
 
@@ -162,11 +172,6 @@ public class App extends Application {
         basketItemsContainer.setAlignment(Pos.CENTER);
         basketItemsContainer.setMaxWidth(Double.MAX_VALUE);
         basketItemsContainer.setMaxHeight(Double.MAX_VALUE);
-
-        for (int i = 0; i < 40; i++) {
-            Button rightButton = createBasicButton("Right", 100, 70);
-            basketItemsContainer.getChildren().add(rightButton);
-        }
 
         BorderPane.setMargin(anchorPane, General_INSETS);
         root.setRight(anchorPane);
