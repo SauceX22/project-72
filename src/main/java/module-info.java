@@ -5,4 +5,7 @@ module com.course.offering {
     opens com.course.offering to javafx.fxml;
 
     exports com.course.offering;
+    exports com.course.offering.models;
+    exports com.course.offering.controllers;
+    exports com.course.offering.utils;
 }

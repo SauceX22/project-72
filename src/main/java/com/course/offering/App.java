@@ -1,32 +1,38 @@
 package com.course.offering;
 
+import java.io.IOException;
+import java.time.DayOfWeek;
+
+import com.course.offering.controllers.BasketController;
+import com.course.offering.controllers.ScheduleController;
+import com.course.offering.models.Lecture;
+import com.course.offering.models.Section;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.skin.TableHeaderRow;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.nio.channels.SocketChannel;
-import java.util.Date;
 
 public class App extends Application {
 
     private BorderPane root;
-    private VBox basketItemsContainer;
-    private TableView table;
+    private BasketController basketController;
+    // private TableView table;
+    private GridPane grid;
 
     // Basics
     private Stage primaryStage;
@@ -44,89 +50,74 @@ public class App extends Application {
 
     private void setupMainPane() {
         // Components smallest to largest
-        ScheduleController tableController = new ScheduleController();
-        table = tableController.initialize();
-        AnchorPane mainPane = new AnchorPane(table);
+        // ScheduleController tableController = new ScheduleController();
+        // table = tableController.initialize();
+        grid = ScheduleController.getInstance().initialize();
+        // VBox scrollContainer = new VBox(grid);
+        ScrollPane scrollPane = new ScrollPane(grid);
+        AnchorPane mainPane = new AnchorPane(scrollPane);
 
-        tableController.addSection(new Section("ICS104", 1, new Date(), "#59-1013"));
+        ScheduleController.getInstance().setStickyTopHeaders(scrollPane);
+        ScheduleController.getInstance().setStickySideHeaders(scrollPane);
+        ScheduleController.getInstance()
+                .addLectureToGrid(new Lecture("ICS104", 22556, DayOfWeek.MONDAY, "0700", 50, "Mr. Nobody", "#59-1013"));
+        ScheduleController.getInstance()
+                .addLectureToGrid(new Lecture("ICS104", 22556, DayOfWeek.THURSDAY,
+                        "0800",
+                        50, "Mr. Nobody", "#59-1013"));
+        ScheduleController.getInstance()
+                .addLectureToGrid(new Lecture("ICS104", 22556, DayOfWeek.SUNDAY,
+                        "0900",
+                        50, "Mr. Nobody", "#59-1013"));
+        ScheduleController.getInstance()
+                .addLectureToGrid(new Lecture("ICS104", 22556, DayOfWeek.MONDAY,
+                        "1000",
+                        50, "Mr. Nobody", "#59-1013"));
+        ScheduleController.getInstance()
+                .addLectureToGrid(new Lecture("ICS104", 22556, DayOfWeek.TUESDAY,
+                        "1100",
+                        50, "Mr. Nobody", "#59-1013"));
+
+        // System.out.println(testLecture.getTimeOfDay12());
 
         // createTableColumns(table);
 
-        // TableRow<String> sevenAM = new TableRow<String>();
-
-        // table.getItems().add(new String("Buggs"));
-        // table.getItems().add(new String("Daffy", "Duck", 83));
-        // table.getItems().add(new String("Foghorn", "Leghorn", 74));
-        // table.getItems().add(new String("Elmer", "Fudd", 83));
-        // table.getItems().add(new String("Tweety", "Bird", 73));
-
-        AnchorPane.setTopAnchor(table, 0.0);
-        AnchorPane.setBottomAnchor(table, 0.0);
-        AnchorPane.setLeftAnchor(table, 0.0);
-        AnchorPane.setRightAnchor(table, 0.0);
+        AnchorPane.setTopAnchor(scrollPane, 0.0);
+        AnchorPane.setBottomAnchor(scrollPane, 0.0);
+        AnchorPane.setLeftAnchor(scrollPane, 0.0);
+        AnchorPane.setRightAnchor(scrollPane, 0.0);
         mainPane.setMaxWidth(Double.MAX_VALUE);
         mainPane.setMaxHeight(Double.MAX_VALUE);
+        mainPane.setBorder(new Border(new BorderStroke(Color.TRANSPARENT,
+                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
-        mainPane.getChildren().setAll(table);
+        scrollPane.setMaxWidth(Double.MAX_VALUE);
+        scrollPane.setMaxHeight(Double.MAX_VALUE);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
 
-        BorderPane.setMargin(mainPane, General_INSETS);
+        // BorderPane.setMargin(mainPane, General_INSETS);
         root.setCenter(mainPane);
-    }
-
-    private void createTableColumns(TableView table) {
-        // Sample for later
-        // TableColumn<Person, Integer> ageColumn = new TableColumn<Person,
-        // Integer>("Age");
-        // ageColumn.setCellValueFactory(new PropertyValueFactory<Person,
-        // Integer>("age"));
-
-        TableColumn<String, String> time = new TableColumn<String, String>("Time");
-        time.setMaxWidth(80);
-        time.setMinWidth(80);
-        time.setResizable(false);
-
-        TableColumn<Section, Node> sunday = new TableColumn<Section, Node>("Sunday");
-        sunday.setCellValueFactory(new PropertyValueFactory<Section, Node>("firstName"));
-
-        TableColumn<Section, Node> monday = new TableColumn<Section, Node>("Monday");
-        monday.setCellValueFactory(new PropertyValueFactory<Section, Node>("lastName"));
-
-        TableColumn<Section, Node> tuesday = new TableColumn<Section, Node>("Tuesday");
-        tuesday.setCellValueFactory(new PropertyValueFactory<Section, Node>("lastName"));
-
-        TableColumn<Section, Node> wednesday = new TableColumn<Section, Node>("Wednesday");
-        wednesday.setCellValueFactory(new PropertyValueFactory<Section, Node>("lastName"));
-
-        TableColumn<Section, Node> thursday = new TableColumn<Section, Node>("Thursday");
-        thursday.setCellValueFactory(new PropertyValueFactory<Section, Node>("lastName"));
-
-        // TableColumn<String, String> friday = new TableColumn<String,
-        // String>("Friday");
-        // friday.setCellValueFactory(new PropertyValueFactory<String,
-        // String>("lastName"));
-
-        // TableColumn<String, String> saturday = new TableColumn<String,
-        // String>("Saturday");
-        // saturday.setCellValueFactory(new PropertyValueFactory<String,
-        // String>("lastName"));
-
-        table.getColumns().addAll(time, sunday, monday, tuesday, wednesday, thursday);
-        // table.getColumns().add(friday);
-        // table.getColumns().add(saturday);
     }
 
     private void setupBottomPane() {
         HBox bottomPane = new HBox(10);
         Button bottomButton = createBasicButton("Save Schedule", 150, 35);
 
-        bottomPane.getChildren().setAll(bottomButton);
+        Button createButton = createBasicButton("Create Sample Item", 150, 35);
+
+        bottomPane.getChildren().addAll(bottomButton, createButton);
 
         // Bottom Pane Setup
         HBox.setMargin(bottomButton, General_INSETS);
+        HBox.setMargin(createButton, General_INSETS);
         bottomPane.setAlignment(Pos.CENTER_LEFT);
         bottomPane.setStyle("-fx-background-color: #eb8d13");
 
+        bottomButton.setOnAction(e -> grid.getChildren().clear());
+
         BorderPane.setMargin(bottomButton, General_INSETS);
+        BorderPane.setMargin(createButton, General_INSETS);
         root.setBottom(bottomPane);
 
     }
@@ -149,14 +140,12 @@ public class App extends Application {
 
     private void setupBasketPane() {
         // Adding components, smallest to largest
-        basketItemsContainer = new VBox();
+        // TODO: Pass the basket items to this constructor
+        basketController = new BasketController();
+        VBox basketItemsContainer = basketController.getBasketButtonsContainer();
         ScrollPane scrollPane = new ScrollPane(basketItemsContainer);
         AnchorPane anchorPane = new AnchorPane(scrollPane);
 
-        // Styling
-        // Fill the AnchorPane with the ScrollPane and set the Anchors to 0.0
-        // That way the ScrollPane will take the full size of the Parent of
-        // the AnchorPane
         AnchorPane.setTopAnchor(scrollPane, 0.0);
         AnchorPane.setBottomAnchor(scrollPane, 0.0);
         AnchorPane.setLeftAnchor(scrollPane, 0.0);
@@ -169,9 +158,10 @@ public class App extends Application {
         scrollPane.setMaxHeight(Double.MAX_VALUE);
         scrollPane.setFitToWidth(true);
 
-        basketItemsContainer.setAlignment(Pos.CENTER);
-        basketItemsContainer.setMaxWidth(Double.MAX_VALUE);
-        basketItemsContainer.setMaxHeight(Double.MAX_VALUE);
+        // Sample basket items
+        for (int i = 0; i < 40; i++) {
+            basketController.addSection(new Section("ICS10" + i, 20568));
+        }
 
         BorderPane.setMargin(anchorPane, General_INSETS);
         root.setRight(anchorPane);
