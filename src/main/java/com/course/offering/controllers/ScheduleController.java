@@ -5,6 +5,7 @@ import com.course.offering.utils.ScheduleTimeConverter;
 
 import javafx.beans.InvalidationListener;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -16,6 +17,7 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -43,18 +45,18 @@ public class ScheduleController {
         this.grid = grid;
     }
 
-    private int numberOfHourRows = 14;
+    private int numberOfHours = 14;
     private int firstRowHeight = 40;
     private int hourRowsHeight = 100;
     private int dayColWidth = 150;
 
     private String outlineColor = "#A2A2A2";
-    private String evenCellBG = "white";
+    private String evenCellBG = "#fff";
     private String oddCellBG = "#E7E7E7";
     private double borderWidth = 0.2;
 
     private Node[] topHeaders = new Node[6];
-    private Node[] sideHeaders = new Node[numberOfHourRows];
+    private Node[] sideHeaders = new Node[numberOfHours * 4];
 
     public GridPane initialize() {
         grid = new GridPane();
@@ -63,22 +65,10 @@ public class ScheduleController {
         grid.setMaxHeight(Double.MAX_VALUE);
 
         fillAsEmptyGrid();
-        setSideHeaders(grid, numberOfHourRows);
-        setTopHeaders(grid);
+        setSideHeaders();
+        setTopHeaders();
 
-        setupColConstraints(dayColWidth);
-
-        // grid.getChildren().remove(2 * 2);
-
-        // grid.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-        // time.setSortable(false);
-
-        // grid.getColumns().addAll(time, sunday, monday, tuesday, wednesday, thursday);
-
-        // for (int i = 0; i < initialRows; i++) {
-        // grid.getItems().add(new LectureTableRow());
-        // }
+        setupColConstraints();
 
         return grid;
     }
@@ -113,7 +103,7 @@ public class ScheduleController {
         scrollPane.hvalueProperty().addListener(headerUpdater);
     }
 
-    private void setTopHeaders(GridPane gridPane) {
+    private void setTopHeaders() {
         topHeaders = new Node[] {
                 getSimpleTextCell("Time", Pos.CENTER),
                 getSimpleTextCell("Sunday", Pos.CENTER),
@@ -126,24 +116,30 @@ public class ScheduleController {
         grid.addRow(0, topHeaders);
     }
 
-    private void setSideHeaders(GridPane gridPane, int numberOfHours) {
+    private void setSideHeaders() {
         RowConstraints headerRowConstraint = new RowConstraints();
         headerRowConstraint.setPercentHeight(firstRowHeight / numberOfHours);
         grid.getRowConstraints().add(headerRowConstraint);
+
+        RowConstraints timeRowConstraint = new RowConstraints();
+        timeRowConstraint.setMinHeight(hourRowsHeight / 4);
+        timeRowConstraint.setPercentHeight(200 / (numberOfHours * 4));
+        int subRowIndex = 0;
         for (int i = 0; i < numberOfHours; i++) {
-            Node timeHeader = getSimpleTextCell(ScheduleTimeConverter.indexToTime12(i), Pos.TOP_CENTER,
-                    (i % 2 == 0 ? evenCellBG : oddCellBG));
-            gridPane.add(timeHeader, 0, i + 1);
-            sideHeaders[i] = timeHeader;
-            RowConstraints timeRowConstraint = new RowConstraints();
-            timeRowConstraint.setMinHeight(hourRowsHeight);
-            timeRowConstraint.setPercentHeight(100 / numberOfHours);
-            grid.getRowConstraints().add(timeRowConstraint);
+            for (int j = 0; j < 4; j++) {
+                Node timeHeader = getSimpleTextCell(j == 0 ? ScheduleTimeConverter.indexToTime12(i) : "",
+                        Pos.TOP_CENTER,
+                        ((i + 1) % 2 == 0 ? evenCellBG : oddCellBG));
+                grid.add(timeHeader, 0, subRowIndex + 1);
+                sideHeaders[subRowIndex] = timeHeader;
+                grid.getRowConstraints().add(timeRowConstraint);
+                subRowIndex++;
+            }
         }
     }
 
     private VBox getSimpleTextCell(String text, Pos position) {
-        return getSimpleTextCell(text, position, "white");
+        return getSimpleTextCell(text, position, "#fff");
     }
 
     private VBox getSimpleTextCell(String text, Pos position, String color) {
@@ -160,14 +156,19 @@ public class ScheduleController {
     }
 
     private void fillAsEmptyGrid() {
-        for (int row = 0; row < numberOfHourRows; row++) {
-            for (int col = 0; col < 6; col++) {
-                grid.add(createEmptyLectureCell(row), col + 1, row + 1);
+
+        int subRowIndex = 0;
+        for (int row = 0; row < numberOfHours; row++) {
+            for (int subRow = 0; subRow < 4; subRow++) {
+                for (int col = 0; col < 6; col++) {
+                    createEmptyCell(col, row + 1, subRowIndex + 1);
+                }
+                subRowIndex++;
             }
         }
     }
 
-    private void setupColConstraints(int dayColWidth) {
+    private void setupColConstraints() {
         ColumnConstraints timeColumnConstraint = new ColumnConstraints();
         ColumnConstraints sundayColumnConstraint = new ColumnConstraints();
         ColumnConstraints mondayColumnConstraint = new ColumnConstraints();
@@ -193,48 +194,56 @@ public class ScheduleController {
 
     }
 
+    private void updateHeaderZIndex() {
+        for (Node header : sideHeaders)
+            header.toFront();
+        for (Node header : topHeaders)
+            header.toFront();
+    }
+
+    private VBox createEmptyCell(int colIndex, int hourRowIndex, int subRowIndex) {
+        VBox emptyCell = new VBox();
+
+        emptyCell.setStyle(
+                "-fx-background-color: " + (hourRowIndex % 2 == 0 ? ScheduleController.getInstance().getEvenCellBG()
+                        : ScheduleController.getInstance().getOddCellBG()) + ";");
+
+        emptyCell.setBorder(
+                new Border(new BorderStroke(Color.valueOf(ScheduleController.getInstance().getOutlineColor()),
+                        BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
+                        new BorderWidths(
+                                ScheduleController.getInstance().getBorderWidth()))));
+
+        grid.add(emptyCell, colIndex, subRowIndex);
+
+        return emptyCell;
+    }
+
     // Save button
     // TODO: Implement the exportation of schedule as a binary file
     public void saveSchedule(ActionEvent event) {
 
     }
 
-    private VBox createEmptyLectureCell(int rowIndex) {
-        VBox fillerCell = new VBox();
-
-        fillerCell.setStyle(
-                "-fx-background-color: " + (rowIndex % 2 == 0 ? ScheduleController.getInstance().getEvenCellBG()
-                        : ScheduleController.getInstance().getOddCellBG()) + "; ");
-
-        fillerCell.setBorder(
-                new Border(new BorderStroke(Color.valueOf(ScheduleController.getInstance().getOutlineColor()),
-                        BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
-                        new BorderWidths(ScheduleController.getInstance().getBorderWidth()))));
-        return fillerCell;
-    }
-
-    // TODO: Implement the addition of Lectures to schedule
-    // lecture on press event
     public void addLectureToGrid(Lecture lecture) {
-        // lectures.add(lecture.getTableIndex(), lecture);
         int colIndex = ScheduleTimeConverter.dayOfWeekTOIndex(lecture.getDay());
-        int rowIndex = lecture.getTableRowIndex();
-
+        int rowIndex = lecture.getSubRowIndex();
         grid.getChildren()
                 .removeIf(node -> GridPane.getColumnIndex(node) == colIndex &&
                         GridPane.getRowIndex(node) == rowIndex);
 
-        Node newLecture = lecture.getLectureTableItem();
-        grid.add(newLecture, colIndex, rowIndex);
-        newLecture.toBack();
-        // System.out.println(lecture);
-        // grid.setItems(lectureRows);
+        // Testing
+        // Node newLectureNode = lecture.getLectureTableItem();
+        Node newLectureNode = lecture;
+        grid.add(newLectureNode, colIndex, rowIndex);
+        GridPane.setRowSpan(newLectureNode, lecture.getRowSpan());
+        updateHeaderZIndex();
     }
 
     // TODO: Get the seciton in question and remove it
-    public void removeLecture(ActionEvent event) {
-        // int selectedID = table.getSelectionModel().getSelectedIndex();
-        // table.getItems().remove(selectedID);
+    public void removeLecture(Lecture lecture) {
+        grid.getChildren().removeIf(lecNode -> lecNode.equals(lecture));
+        createEmptyCell(lecture.getColIndex(), lecture.getRowIndex(), lecture.getSubRowIndex());
     }
 
     public String getOutlineColor() {

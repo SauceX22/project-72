@@ -140,4 +140,10 @@ public class ScheduleTimeConverter {
                 return 7;
         }
     }
+
+    public static int durationMinToRowSpan(int durationInMinutes) {
+        if ((durationInMinutes % 15) == 0)
+            return Math.round(durationInMinutes / 15);
+        return 1;
+    }
 }

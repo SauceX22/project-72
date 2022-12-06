@@ -1,14 +1,13 @@
 package com.course.offering.models;
 
-import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
-import java.util.Date;
 
 import com.course.offering.controllers.ScheduleController;
 import com.course.offering.utils.ScheduleTimeConverter;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
@@ -18,7 +17,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-public class Lecture {
+public class Lecture extends BorderPane {
 
     private final String course;
 
@@ -36,25 +35,25 @@ public class Lecture {
 
     private final String location;
 
-    private Node lectureTableItem;
+    private final int subRoxIndex;
+    private final int rowIndex;
+    private final int colIndex;
+    private final int rowSpan = 4;
 
-    private final int tableRowIndex;
-    private final int tableColIndex;
-
-    public Node getLectureTableItem() {
-        return lectureTableItem;
+    public int getRowIndex() {
+        return rowIndex;
     }
 
-    public void setLectureTableItem(Node newLecTableItem) {
-        this.lectureTableItem = newLecTableItem;
+    public int getRowSpan() {
+        return rowSpan;
     }
 
-    public int getTableColIndex() {
-        return tableColIndex;
+    public int getColIndex() {
+        return colIndex;
     }
 
-    public int getTableRowIndex() {
-        return tableRowIndex;
+    public int getSubRowIndex() {
+        return subRoxIndex;
     }
 
     public String getCourse() {
@@ -94,22 +93,6 @@ public class Lecture {
         return location;
     }
 
-    public Lecture(int colIndex, int rowIndex) {
-        this.course = "";
-        this.sectionId = 0;
-        this.day = ScheduleTimeConverter.indexToDayOfWeek(colIndex);
-        this.timeOfDay24 = ScheduleTimeConverter.indexToTime24(rowIndex);
-        this.timeOfDay12 = ScheduleTimeConverter.indexToTime12(rowIndex);
-        this.durationInMinutes = 0;
-        this.instructor = "";
-        this.location = "";
-        this.lectureTableItem = new VBox();
-        this.tableRowIndex = rowIndex;
-        this.tableColIndex = colIndex;
-        // System.out.println(getTimeOfDay12());
-        // System.out.println(getTableIndex());
-    }
-
     public Lecture(
             String course,
             int sectionId,
@@ -126,31 +109,30 @@ public class Lecture {
         this.durationInMinutes = durationInMinutes;
         this.instructor = instructor;
         this.location = location;
-        this.lectureTableItem = createLectureCell();
-        this.tableRowIndex = ScheduleTimeConverter.time24ToIndex(timeOfDay24);
-        this.tableColIndex = ScheduleTimeConverter.dayOfWeekTOIndex(day);
+        this.rowIndex = ScheduleTimeConverter.time24ToIndex(timeOfDay24);
+        this.subRoxIndex = (ScheduleTimeConverter.time24ToIndex(timeOfDay24) * 4 - 3);
+        this.colIndex = ScheduleTimeConverter.dayOfWeekTOIndex(day);
+
+        setLectureNode();
     }
 
-    private Node createLectureCell() {
-        Button button = new Button(getCourse());
-        BorderPane lecturePane = new BorderPane();
-        lecturePane.setMaxWidth(Double.MAX_VALUE);
-        lecturePane.setMaxHeight(Double.MAX_VALUE);
-        lecturePane.setMinHeight(80);
-        lecturePane.setRight(button);
-        lecturePane.setStyle("-fx-background-color: #f34839;" +
-                "-fx-background-radius: 20;" +
-                "" +
+    private void setLectureNode() {
+        // Button button = new Button(getCourse());
+        Label label = new Label(getCourse());
+        this.setMaxWidth(Double.MAX_VALUE);
+        this.setMaxHeight(Double.MAX_VALUE);
+        this.setMinHeight(80);
+        this.setCenter(label);
+        this.setStyle("-fx-background-color: #f34839;" +
+                "-fx-background-radius: 15;" +
                 "");
-        lecturePane.setBorder(
+        this.setBorder(
                 new Border(new BorderStroke(Color.valueOf(ScheduleController.getInstance().getOutlineColor()),
                         BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
                         new BorderWidths(ScheduleController.getInstance().getBorderWidth()))));
-        button.setOnAction(e -> {
-            System.out.println(e.getSource().getClass() + " was clicked");
-        });
-
-        return lecturePane;
+        // label.setOnAction(e -> {
+        // System.out.println(e.getSource().getClass() + " was clicked");
+        // });
     }
 
     // TODO: Fix this conversion
