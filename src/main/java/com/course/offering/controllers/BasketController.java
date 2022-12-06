@@ -80,7 +80,7 @@ public class BasketController {
     }
 
     private Button createBasketButton(Section section, double prefHeight) {
-        Button button = new Button(section.getCourse() + " ");
+        Button button = new Button(section.getCourseFullName() + " ");
         button.setMaxWidth(Double.MAX_VALUE);
         button.setMaxHeight(Double.MAX_VALUE);
         button.setPrefHeight(prefHeight);

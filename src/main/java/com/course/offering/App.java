@@ -157,9 +157,10 @@ public class App extends Application {
         scrollPane.setMaxHeight(Double.MAX_VALUE);
         scrollPane.setFitToWidth(true);
 
+        // TODO Delete this sample thing
         // Sample basket items
         for (int i = 0; i < 40; i++) {
-            basketController.addSection(new Section("ICS10" + i, 20568));
+            // basketController.addSection(new Section("ICS10" + i, 20568));
         }
 
         BorderPane.setMargin(anchorPane, General_INSETS);
