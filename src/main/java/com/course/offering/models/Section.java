@@ -20,6 +20,7 @@ public class Section {
         return lectures;
     }
 
+    // TODO add the lectures based on the section's properties
     private void setLectures() {
         for (int i = 0; i < days.length(); i++) {
 

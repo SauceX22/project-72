@@ -32,7 +32,7 @@ public class BasketController {
     public BasketController(ArrayList<Section> sections) {
         initializeBasketMenu();
         setBasketSections(sections);
-        System.out.println(Arrays.toString(FileController.getValidSections().toArray()));
+        // System.out.println(Arrays.toString(FileController.getValidSections().toArray()));
         addSections((FileController.getValidSections()));
         // getBasketSections().addListener(new ListChangeListener<Section>() {
         // @Override
