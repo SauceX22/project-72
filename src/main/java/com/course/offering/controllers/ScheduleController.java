@@ -1,6 +1,9 @@
 package com.course.offering.controllers;
 
+import java.util.ArrayList;
+
 import com.course.offering.models.Lecture;
+import com.course.offering.models.Section;
 import com.course.offering.utils.ScheduleTimeConverter;
 
 import javafx.beans.InvalidationListener;
@@ -57,6 +60,12 @@ public class ScheduleController {
 
     private Node[] topHeaders = new Node[6];
     private Node[] sideHeaders = new Node[numberOfHours * 4];
+
+    private static ArrayList<Section> scheduleSections = new ArrayList<Section>();
+
+    public static ArrayList<Section> getScheduleSections() {
+        return scheduleSections;
+    }
 
     public GridPane initialize() {
         grid = new GridPane();
@@ -220,27 +229,30 @@ public class ScheduleController {
     }
 
     // Save button
-    // TODO: Implement the exportation of schedule as a binary file
-    public void saveSchedule(ActionEvent event) {
-
+    public static void saveSchedule() {
+        FileController.saveSchedule(scheduleSections);
     }
 
-    public void addLectureToGrid(Lecture lecture) {
+    public void addSection(Section section) {
+        for (Lecture lecture : section.getLectures()) {
+            addLecture(lecture);
+        }
+        scheduleSections.add(section);
+    }
+
+    // Adds a lecture to the schedule (grid) and the final sections list
+    public void addLecture(Lecture lecture) {
         int colIndex = ScheduleTimeConverter.dayOfWeekTOIndex(lecture.getDay());
         int rowIndex = lecture.getSubRowIndex();
         grid.getChildren()
                 .removeIf(node -> GridPane.getColumnIndex(node) == colIndex &&
                         GridPane.getRowIndex(node) == rowIndex);
 
-        // Testing
-        // Node newLectureNode = lecture.getLectureTableItem();
-        Node newLectureNode = lecture;
-        grid.add(newLectureNode, colIndex, rowIndex);
-        GridPane.setRowSpan(newLectureNode, lecture.getRowSpan());
+        grid.add(lecture, colIndex, rowIndex);
+        GridPane.setRowSpan(lecture, lecture.getRowSpan());
         updateHeaderZIndex();
     }
 
-    // TODO: Get the seciton in question and remove it
     public void removeLecture(Lecture lecture) {
         grid.getChildren().removeIf(lecNode -> lecNode.equals(lecture));
         createEmptyCell(lecture.getColIndex(), lecture.getRowIndex(), lecture.getSubRowIndex());

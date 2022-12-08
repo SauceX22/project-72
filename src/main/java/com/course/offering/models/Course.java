@@ -1,5 +1,7 @@
 package com.course.offering.models;
 
+import java.util.ArrayList;
+
 public class Course {
     private String courseName;
     private String creditHours;
@@ -7,6 +9,16 @@ public class Course {
     private String corequesties;
     private String grade;
     private String term;
+
+    private ArrayList<Section> sections = new ArrayList<Section>();
+
+    public ArrayList<Section> getSections() {
+        return sections;
+    }
+
+    public void setSections(ArrayList<Section> sections) {
+        this.sections = sections;
+    }
 
     // Finished courses constructer
     public Course(String course, String term, String grade) {
@@ -87,4 +99,9 @@ public class Course {
         return term;
     }
 
+    @Override
+    public String toString() {
+        // TODO Auto-generated method stub
+        return courseName + " " + creditHours + " " + term;
+    }
 }

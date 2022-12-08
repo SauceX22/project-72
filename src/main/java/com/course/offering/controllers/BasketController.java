@@ -1,5 +1,10 @@
 package com.course.offering.controllers;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import com.course.offering.models.Course;
 import com.course.offering.models.Section;
 
 import javafx.collections.FXCollections;
@@ -12,7 +17,7 @@ import javafx.scene.layout.VBox;
 
 public class BasketController {
 
-    private ObservableList<Section> basketSections;
+    private ArrayList<Section> basketSections;
 
     private VBox basketButtonsContainer;
 
@@ -21,13 +26,14 @@ public class BasketController {
     private double basketItemHeight = 120;
 
     public BasketController() {
-        this(FXCollections.observableArrayList());
-
+        this(new ArrayList<>());
     }
 
-    public BasketController(ObservableList<Section> sections) {
+    public BasketController(ArrayList<Section> sections) {
         initializeBasketMenu();
         setBasketSections(sections);
+        System.out.println(Arrays.toString(FileController.getValidSections().toArray()));
+        addSections((FileController.getValidSections()));
         // getBasketSections().addListener(new ListChangeListener<Section>() {
         // @Override
         // public void onChanged(Change<? extends Section> listener) {
@@ -39,12 +45,12 @@ public class BasketController {
         // });
     }
 
-    public ObservableList<Section> getBasketSections() {
+    public ArrayList<Section> getBasketSections() {
         return this.basketSections;
     }
 
-    public void setBasketSections(ObservableList<Section> sections) {
-        this.basketSections = FXCollections.observableArrayList(sections);
+    public void setBasketSections(ArrayList<Section> sections) {
+        this.basketSections = new ArrayList<>();
         addSections(sections);
     }
 
@@ -53,7 +59,7 @@ public class BasketController {
         basketButtonsContainer.getChildren().add(createBasketButton(section, basketItemHeight));
     }
 
-    public void addSections(ObservableList<Section> sections) {
+    public void addSections(ArrayList<Section> sections) {
         for (Section section : sections) {
             addSection(section);
         }

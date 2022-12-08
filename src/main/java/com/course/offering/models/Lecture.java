@@ -19,9 +19,7 @@ import javafx.scene.paint.Color;
 
 public class Lecture extends BorderPane {
 
-    private final String course;
-
-    private final int sectionId;
+    private final Section section;
 
     private final DayOfWeek day;
 
@@ -31,14 +29,14 @@ public class Lecture extends BorderPane {
 
     private final int durationInMinutes;
 
-    private final String instructor;
-
-    private final String location;
-
     private final int subRoxIndex;
     private final int rowIndex;
     private final int colIndex;
     private final int rowSpan = 4;
+
+    public Section getSection() {
+        return section;
+    }
 
     public int getRowIndex() {
         return rowIndex;
@@ -56,8 +54,8 @@ public class Lecture extends BorderPane {
         return subRoxIndex;
     }
 
-    public String getCourse() {
-        return course;
+    public String getCourseName() {
+        return section.getCourseFullName();
     }
 
     public DayOfWeek getDay() {
@@ -82,33 +80,27 @@ public class Lecture extends BorderPane {
     }
 
     public int getSectionId() {
-        return sectionId;
+        return Integer.parseInt(section.getCRN());
     }
 
     public String getInstructor() {
-        return instructor;
+        return section.getInstructor();
     }
 
     public String getLocation() {
-        return location;
+        return section.getLocation();
     }
 
     public Lecture(
-            String course,
-            int sectionId,
+            Section section,
             DayOfWeek day,
             String timeOfDay24,
-            int durationInMinutes,
-            String instructor,
-            String location) {
-        this.course = course;
-        this.sectionId = sectionId;
+            int durationInMinutes) {
+        this.section = section;
         this.day = day;
         this.timeOfDay24 = timeOfDay24;
         this.timeOfDay12 = setTimeOfDay12();
         this.durationInMinutes = durationInMinutes;
-        this.instructor = instructor;
-        this.location = location;
         this.rowIndex = ScheduleTimeConverter.time24ToIndex(timeOfDay24);
         this.subRoxIndex = (ScheduleTimeConverter.time24ToIndex(timeOfDay24) * 4 - 3);
         this.colIndex = ScheduleTimeConverter.dayOfWeekTOIndex(day);
@@ -118,7 +110,7 @@ public class Lecture extends BorderPane {
 
     private void setLectureNode() {
         // Button button = new Button(getCourse());
-        Label label = new Label(getCourse());
+        Label label = new Label(getCourseName());
         this.setMaxWidth(Double.MAX_VALUE);
         this.setMaxHeight(Double.MAX_VALUE);
         this.setMinHeight(80);
@@ -138,10 +130,10 @@ public class Lecture extends BorderPane {
     // TODO: Fix this conversion
     @Override
     public String toString() {
-        if (course == null) {
+        if (getCourseName() == null) {
             return "(empty)";
         } else {
-            return course;
+            return getCourseName();
         }
     }
 

@@ -1,12 +1,10 @@
 package com.course.offering;
 
 import java.io.IOException;
-import java.time.DayOfWeek;
 
 import com.course.offering.controllers.BasketController;
+import com.course.offering.controllers.FileController;
 import com.course.offering.controllers.ScheduleController;
-import com.course.offering.models.Lecture;
-import com.course.offering.models.Section;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -14,7 +12,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
@@ -24,7 +21,6 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -47,43 +43,19 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
+
+        FileController.Initialize();
         initUi();
     }
 
     private void setupMainPane() {
         // Components smallest to largest
-        // ScheduleController tableController = new ScheduleController();
-        // table = tableController.initialize();
         grid = ScheduleController.getInstance().initialize();
-        // VBox scrollContainer = new VBox(grid);
         ScrollPane scrollPane = new ScrollPane(grid);
         AnchorPane mainPane = new AnchorPane(scrollPane);
 
         ScheduleController.getInstance().setStickyTopHeaders(scrollPane);
         ScheduleController.getInstance().setStickySideHeaders(scrollPane);
-
-        Lecture mine = new Lecture("Haitham", 22556, DayOfWeek.TUESDAY,
-                "1100",
-                50, "Mr. Nobody", "#59-1013");
-        ScheduleController.getInstance()
-                .addLectureToGrid(new Lecture("ICS104", 22556, DayOfWeek.MONDAY, "0700", 50,
-                        "Mr. Nobody", "#59-1013"));
-        ScheduleController.getInstance()
-                .addLectureToGrid(new Lecture("ICS104", 22556, DayOfWeek.THURSDAY,
-                        "0800",
-                        50, "Mr. Nobody", "#59-1013"));
-        ScheduleController.getInstance()
-                .addLectureToGrid(new Lecture("ICS104", 22556, DayOfWeek.SUNDAY,
-                        "0900",
-                        50, "Mr. Nobody", "#59-1013"));
-        ScheduleController.getInstance()
-                .addLectureToGrid(new Lecture("ICS104", 22556, DayOfWeek.MONDAY,
-                        "1000",
-                        50, "Mr. Nobody", "#59-1013"));
-        ScheduleController.getInstance()
-                .addLectureToGrid(mine);
-
-        // createTableColumns(table);
 
         AnchorPane.setTopAnchor(scrollPane, 0.0);
         AnchorPane.setBottomAnchor(scrollPane, 0.0);
@@ -99,24 +71,23 @@ public class App extends Application {
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(false);
         scrollPane.setMaxSize(grid.getWidth(), grid.getHeight());
-        // BorderPane.setMargin(mainPane, General_INSETS);
         root.setCenter(mainPane);
     }
 
     private void setupBottomPane() {
         HBox bottomPane = new HBox(10);
-        Button bottomButton = createBasicButton("Save Schedule", 150, 35);
+        Button saveScheduleButton = createBasicButton("Save Schedule", 150, 35);
 
-        bottomPane.getChildren().addAll(bottomButton);
+        bottomPane.getChildren().addAll(saveScheduleButton);
 
         // Bottom Pane Setup
-        HBox.setMargin(bottomButton, General_INSETS);
+        HBox.setMargin(saveScheduleButton, General_INSETS);
         bottomPane.setAlignment(Pos.CENTER_LEFT);
         bottomPane.setStyle("-fx-background-color: #eb8d13");
 
-        bottomButton.setOnAction(e -> grid.getChildren().clear());
+        saveScheduleButton.setOnAction(e -> FileController.saveSchedule(ScheduleController.getScheduleSections()));
 
-        BorderPane.setMargin(bottomButton, General_INSETS);
+        BorderPane.setMargin(saveScheduleButton, General_INSETS);
         root.setBottom(bottomPane);
 
     }
@@ -156,12 +127,6 @@ public class App extends Application {
         scrollPane.setMaxWidth(Double.MAX_VALUE);
         scrollPane.setMaxHeight(Double.MAX_VALUE);
         scrollPane.setFitToWidth(true);
-
-        // TODO Delete this sample thing
-        // Sample basket items
-        for (int i = 0; i < 40; i++) {
-            // basketController.addSection(new Section("ICS10" + i, 20568));
-        }
 
         BorderPane.setMargin(anchorPane, General_INSETS);
         root.setRight(anchorPane);

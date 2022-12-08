@@ -1524,12 +1524,12 @@ SWE 363-04,LEC,24518,Web Engineering & Development,MD MUSFIQUE ANWAR,MW,1000-111
 SWE 387-01,LEC,20522,Software Project Management,MOHAMMAD ALSHAYEB,MW,1000-1115,23-014,Closed,Open
 SWE 387-02,LEC,21853,Software Project Management,MOHAMMAD ALSHAYEB,MW,1230-1345,22-125,Closed,Open
 SWE 411-01,LPJ,24439,Software Engineering Project I,None,W,1720-2000,24-240,Closed,Closed
-SWE 417-01,LPJ,22094,Software Engineering Project I,MOHAMMAD ALSHAYEB,R,1720-2000,24-153,Open,Closed
-SWE 418-01,PRJ,20956,Software Engineering Project II,HAMOOD AL-JAMAAN,R,1720-2000,24-125,Open,Closed
-SWE 418-02,PRJ,22109,Software Engineering Project II,JAMELEDDINE HASSINE,R,1720-2000,24-135,Open,Closed
-SWE 418-03,PRJ,22110,Software Engineering Project II,MAHMOUD NIAZI,R,1720-2000,24-146,Open,Closed
-SWE 418-04,PRJ,24087,Software Engineering Project II,MOATAZ AHMED,R,1720-2000,22-119,Open,Closed
-SWE 418-05,PRJ,24088,Software Engineering Project II,Y HASSAN,R,1720-2000,22-121,Closed,Open
+SWE 411-01,LPJ,22094,Software Engineering Project I,MOHAMMAD ALSHAYEB,R,1720-2000,24-153,Open,Closed
+SWE 412-01,PRJ,20956,Software Engineering Project II,HAMOOD AL-JAMAAN,R,1720-2000,24-125,Open,Closed
+SWE 412-02,PRJ,22109,Software Engineering Project II,JAMELEDDINE HASSINE,R,1720-2000,24-135,Open,Closed
+SWE 412-03,PRJ,22110,Software Engineering Project II,MAHMOUD NIAZI,R,1720-2000,24-146,Open,Closed
+SWE 412-04,PRJ,24087,Software Engineering Project II,MOATAZ AHMED,R,1720-2000,22-119,Open,Closed
+SWE 412-05,PRJ,24088,Software Engineering Project II,Y HASSAN,R,1720-2000,22-121,Closed,Open
 SWE 445-01,LEC,22863,Secure Software Development,MAHMOUD NIAZI,MW,1000-1115,24-153,Closed,Open
 SWE 455-01,LEC,24105,Cloud Applications Engineering,FAKHRI ALAM KHAN,MW,1230-1345,24-153,Closed,Open
 SWE 526-01,LEC,24106,"Software Valid.,Vari. & QA",JAMELEDDINE HASSINE,UT,1845-2000,24-158,Open,Closed
