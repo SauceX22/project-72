@@ -1,5 +1,6 @@
 package com.course.offering.models;
 
+import java.io.Serializable;
 import java.time.DayOfWeek;
 
 import com.course.offering.controllers.ScheduleController;
@@ -17,22 +18,18 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-public class Lecture extends BorderPane {
+public class Lecture extends BorderPane implements Serializable {
 
     private final Section section;
-
     private final DayOfWeek day;
-
-    private final String timeOfDay24;
-
-    private final String timeOfDay12;
-
-    private final int durationInMinutes;
+    private final String startTime24;
+    private final String endTime24;
+    private final String startTime12;
 
     private final int subRoxIndex;
     private final int rowIndex;
     private final int colIndex;
-    private final int rowSpan = 4;
+    private final int rowSpan;
 
     public Section getSection() {
         return section;
@@ -62,21 +59,17 @@ public class Lecture extends BorderPane {
         return day;
     }
 
-    public String getTimeOfDay24() {
-        return timeOfDay24;
+    public String getStartTime24() {
+        return startTime24;
     }
 
-    private String setTimeOfDay12() {
-        return ScheduleTimeConverter.time24To12(getTimeOfDay24());
-    }
+    public String getStartTime12() {
 
-    public String getTimeOfDay12() {
-
-        return timeOfDay12;
+        return startTime12;
     }
 
     public int getDurationInMinutes() {
-        return durationInMinutes;
+        return ScheduleTimeConverter.timeIntervalToDuration(startTime12, endTime24);
     }
 
     public int getSectionId() {
@@ -94,16 +87,17 @@ public class Lecture extends BorderPane {
     public Lecture(
             Section section,
             DayOfWeek day,
-            String timeOfDay24,
-            int durationInMinutes) {
+            String startTime24,
+            String endTime24) {
         this.section = section;
         this.day = day;
-        this.timeOfDay24 = timeOfDay24;
-        this.timeOfDay12 = setTimeOfDay12();
-        this.durationInMinutes = durationInMinutes;
-        this.rowIndex = ScheduleTimeConverter.time24ToIndex(timeOfDay24);
-        this.subRoxIndex = (ScheduleTimeConverter.time24ToIndex(timeOfDay24) * 4 - 3);
+        this.startTime24 = startTime24;
+        this.endTime24 = endTime24;
+        this.startTime12 = ScheduleTimeConverter.time24To12(startTime24);
+        this.rowIndex = ScheduleTimeConverter.time24ToIndex(startTime24);
+        this.subRoxIndex = (ScheduleTimeConverter.time24ToIndex(startTime24) * 4 - 3);
         this.colIndex = ScheduleTimeConverter.dayOfWeekTOIndex(day);
+        this.rowSpan = ScheduleTimeConverter.timeIntervalToRowSpan(startTime24, endTime24);
 
         setLectureNode();
     }
@@ -111,10 +105,16 @@ public class Lecture extends BorderPane {
     private void setLectureNode() {
         // Button button = new Button(getCourse());
         Label label = new Label(getCourseName());
+        Button removeButton = new Button("Remove");
+
+        removeButton.setOnAction(e -> {
+            ScheduleController.getInstance().removeSection(getSection());
+        });
         this.setMaxWidth(Double.MAX_VALUE);
         this.setMaxHeight(Double.MAX_VALUE);
         this.setMinHeight(80);
         this.setCenter(label);
+        this.setRight(removeButton);
         this.setStyle("-fx-background-color: #f34839;" +
                 "-fx-background-radius: 15;" +
                 "");

@@ -113,12 +113,8 @@ public class ScheduleTimeConverter {
                 return DayOfWeek.TUESDAY;
             case 4:
                 return DayOfWeek.WEDNESDAY;
-            case 5:
-                return DayOfWeek.THURSDAY;
-            case 6:
-                return DayOfWeek.FRIDAY;
             default:
-                return DayOfWeek.SATURDAY;
+                return DayOfWeek.THURSDAY;
         }
     }
 
@@ -132,18 +128,43 @@ public class ScheduleTimeConverter {
                 return 3;
             case WEDNESDAY:
                 return 4;
-            case THURSDAY:
-                return 5;
-            case FRIDAY:
-                return 6;
             default:
-                return 7;
+                return 5;
         }
     }
 
-    public static int durationMinToRowSpan(int durationInMinutes) {
-        if ((durationInMinutes % 15) == 0)
-            return Math.round(durationInMinutes / 15);
-        return 1;
+    public static int durationToRowSpan(int durationInMinutes) {
+        switch (durationInMinutes) {
+            case 50:
+                return 4;
+            default:
+                return Math.round(durationInMinutes / 15);
+        }
+    }
+
+    public static int timeIntervalToRowSpan(String startTime, String endTime) {
+        return durationToRowSpan(timeIntervalToDuration(startTime, endTime));
+    }
+
+    public static int timeIntervalToDuration(String startTime, String endTime) {
+        int difference = Math.abs(Integer.parseInt(startTime) - Integer.parseInt(endTime));
+        int minutes = difference % 100;
+        int difference_in_minutes = (difference - minutes) / 100 * 60 + minutes;
+        return difference_in_minutes;
+    }
+
+    public static DayOfWeek letterToDayOfWeek(char letter) {
+        switch (letter) {
+            case 'U':
+                return DayOfWeek.SUNDAY;
+            case 'M':
+                return DayOfWeek.MONDAY;
+            case 'T':
+                return DayOfWeek.TUESDAY;
+            case 'W':
+                return DayOfWeek.WEDNESDAY;
+            default:
+                return DayOfWeek.THURSDAY;
+        }
     }
 }

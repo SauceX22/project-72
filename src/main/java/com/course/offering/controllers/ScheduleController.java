@@ -228,11 +228,6 @@ public class ScheduleController {
         return emptyCell;
     }
 
-    // Save button
-    public static void saveSchedule() {
-        FileController.saveSchedule(scheduleSections);
-    }
-
     public void addSection(Section section) {
         for (Lecture lecture : section.getLectures()) {
             addLecture(lecture);
@@ -241,7 +236,7 @@ public class ScheduleController {
     }
 
     // Adds a lecture to the schedule (grid) and the final sections list
-    public void addLecture(Lecture lecture) {
+    private void addLecture(Lecture lecture) {
         int colIndex = ScheduleTimeConverter.dayOfWeekTOIndex(lecture.getDay());
         int rowIndex = lecture.getSubRowIndex();
         grid.getChildren()
@@ -253,7 +248,15 @@ public class ScheduleController {
         updateHeaderZIndex();
     }
 
-    public void removeLecture(Lecture lecture) {
+    public void removeSection(Section section) {
+        for (Lecture lecture : section.getLectures()) {
+            removeLecture(lecture);
+        }
+        scheduleSections.remove(section);
+        BasketController.getInstance().updateAvailability();
+    }
+
+    private void removeLecture(Lecture lecture) {
         grid.getChildren().removeIf(lecNode -> lecNode.equals(lecture));
         createEmptyCell(lecture.getColIndex(), lecture.getRowIndex(), lecture.getSubRowIndex());
     }
