@@ -29,6 +29,7 @@ public class Section implements Serializable {
     private String days;
     private String time;
     private String location;
+    private HBox status;
 
     // These are for displaying in the table
     private ArrayList<Lecture> lectures = new ArrayList<>();
@@ -65,6 +66,8 @@ public class Section implements Serializable {
         this.days = days;
         this.time = time;
         this.location = location;
+        this.status = new HBox();
+        this.status.setStyle("-fx-background-color: #F5F5F5;");
         this.basketButton = createBaskeButton();
         setLectures();
     }
@@ -76,6 +79,14 @@ public class Section implements Serializable {
             }
         }
         return false;
+    }
+
+    public HBox getStatus() {
+        return status;
+    }
+
+    public void setStatus(HBox status) {
+        this.status = status;
     }
 
     public String getCourseName() {

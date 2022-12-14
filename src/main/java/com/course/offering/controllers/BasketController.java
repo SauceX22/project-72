@@ -24,24 +24,14 @@ public class BasketController {
 
     private VBox basketButtonsContainer;
 
-    public BasketController() {
-        this(new ArrayList<>());
-    }
-
-    public BasketController(ArrayList<Section> sections) {
+    private BasketController() {
         initializeBasketMenu();
-        setBasketSections(sections);
-        addSections((FileController.getValidSections()));
-
+        // test with validSections
+        // addSections(basketSections);
     }
 
     public ArrayList<Section> getBasketSections() {
         return this.basketSections;
-    }
-
-    public void setBasketSections(ArrayList<Section> sections) {
-        this.basketSections = new ArrayList<>();
-        addSections(sections);
     }
 
     public void addSection(Section section) {
@@ -82,6 +72,8 @@ public class BasketController {
         basketButtonsContainer.setAlignment(Pos.CENTER);
         basketButtonsContainer.setMaxWidth(Double.MAX_VALUE);
         basketButtonsContainer.setMaxHeight(Double.MAX_VALUE);
+
+        this.basketSections = new ArrayList<>();
     }
 
     public void updateAvailability() {

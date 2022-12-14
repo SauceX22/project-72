@@ -35,7 +35,6 @@ public class ScheduleController {
         return instance;
     }
 
-    // Table
     private GridPane grid;
 
     public GridPane getGrid() {

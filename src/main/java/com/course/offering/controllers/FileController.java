@@ -43,9 +43,7 @@ public class FileController {
         return validSections;
     }
 
-    public static void Initialize() {
-        Student student = new Student();
-
+    public static void Initialize(Student student) {
         System.out.println("Reading Files...");
         // FinishedCourses.csv code
         getFinishedCourses(student);
@@ -75,6 +73,7 @@ public class FileController {
                 }
             }
             student.setValidSections(validSections);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
