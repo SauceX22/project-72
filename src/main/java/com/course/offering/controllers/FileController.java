@@ -1,6 +1,7 @@
 package com.course.offering.controllers;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -17,6 +18,12 @@ import java.util.Scanner;
 import com.course.offering.models.Course;
 import com.course.offering.models.Section;
 import com.course.offering.models.Student;
+
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 public class FileController {
 
@@ -127,21 +134,29 @@ public class FileController {
         }
     }
 
-    public static void saveScheduleSections(ArrayList<Section> sections) {
+    public static void saveScheduleSections(ArrayList<Section> sections, Stage stage) {
         // Convert to array, so that checking when reading is easier
         Section[] sectionsArr = sections.toArray(new Section[sections.size()]);
 
+        File savingLocation = chooseSavingLocation(stage);
+        if (savingLocation == null)
+            return;
+
         // System.out.println("Saving..." + sectionsArr[0]);
-        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(binaryFilePath))) {
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(savingLocation))) {
             outputStream.writeObject(sectionsArr);
-            System.out.println("Success!");
+            System.out.println("Saving Success!");
         } catch (IOException e) {
             System.err.println(e);
         }
     }
 
-    public static ArrayList<Section> readScheduleSections() {
-        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(binaryFilePath))) {
+    public static ArrayList<Section> readScheduleSections(Stage stage, Button openDialogButton) {
+        File scheduleFile = chooseSavedFile(stage, openDialogButton);
+        if (scheduleFile == null)
+            return new ArrayList<>();
+
+        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(scheduleFile))) {
             Object object = inputStream.readObject();
             if (object instanceof Section[]) {
                 System.out.println(Arrays.toString((Section[]) object));
@@ -152,5 +167,34 @@ public class FileController {
         }
         return null;
 
+    }
+
+    private static String lastVisitedDirectory = System.getProperty("user.home");
+
+    private static File chooseSavedFile(Stage stage, Button button) {
+        FileChooser fileChooser = new FileChooser();
+
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("All Files", "*.bin"));
+        fileChooser.setInitialDirectory(new File(lastVisitedDirectory));
+        // get the file selected
+        File file = fileChooser.showOpenDialog(stage);
+
+        lastVisitedDirectory = (file != null) ? file.getParent() : System.getProperty("user.home");
+        if (file != null)
+            button.setText(file.getAbsolutePath() + "  selected");
+
+        return file;
+    }
+
+    private static File chooseSavingLocation(Stage stage) {
+        FileChooser fileChooser = new FileChooser();
+
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("All Files", "*.bin"));
+        fileChooser.setInitialDirectory(new File(lastVisitedDirectory));
+        // get the file selected
+        File file = fileChooser.showSaveDialog(stage);
+
+        lastVisitedDirectory = (file != null) ? file.getParent() : System.getProperty("user.home");
+        return file;
     }
 }

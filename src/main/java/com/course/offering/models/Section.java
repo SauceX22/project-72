@@ -29,12 +29,12 @@ public class Section implements Serializable {
     private String days;
     private String time;
     private String location;
-    private HBox status;
+    private transient HBox status;
 
     // These are for displaying in the table
     private ArrayList<Lecture> lectures = new ArrayList<>();
 
-    private BasketButton basketButton;
+    private transient Button basketButton;
     private double basketItemHeight = 120;
 
     public ArrayList<Lecture> getLectures() {
@@ -135,8 +135,8 @@ public class Section implements Serializable {
         // " Day " + days + " Time " + time + " location " + location;
     }
 
-    public BasketButton createBaskeButton() {
-        BasketButton button = new BasketButton();
+    public Button createBaskeButton() {
+        Button button = new Button();
         BorderPane sectionData = new BorderPane();
 
         // Top

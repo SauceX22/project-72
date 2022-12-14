@@ -105,8 +105,9 @@ public class App extends Application {
         bottomPane.setAlignment(Pos.CENTER_LEFT);
         bottomPane.setStyle("-fx-background-color: #eb8d13");
 
-        saveScheduleButton.setOnAction(
-                e -> FileController.saveScheduleSections(ScheduleController.getScheduleSections()));
+        saveScheduleButton.setOnAction(e -> {
+            FileController.saveScheduleSections(ScheduleController.getScheduleSections(), primaryStage);
+        });
 
         BorderPane.setMargin(saveScheduleButton, General_INSETS);
         root.setBottom(bottomPane);
