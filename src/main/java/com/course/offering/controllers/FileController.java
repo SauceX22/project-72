@@ -20,10 +20,9 @@ import com.course.offering.models.Section;
 import com.course.offering.models.Student;
 
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
 
 public class FileController {
 
@@ -31,8 +30,6 @@ public class FileController {
     private static ArrayList<Course> degreePlanCourses = new ArrayList<>();
     private static ArrayList<Course> eligibleCourses = new ArrayList<>();
     private static ArrayList<Section> validSections = new ArrayList<>();
-
-    private static String binaryFilePath = "output";
 
     public static ArrayList<Course> getFinishedCourses() {
         return finishedCourses;

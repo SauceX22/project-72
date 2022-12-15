@@ -1,11 +1,9 @@
 package com.course.offering.models;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 
-import com.course.offering.controllers.FileController;
 import com.course.offering.utils.ScheduleTimeConverter;
 
 import javafx.geometry.Insets;

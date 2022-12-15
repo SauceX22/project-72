@@ -101,7 +101,6 @@ public class Course {
 
     @Override
     public String toString() {
-        // TODO Auto-generated method stub
         return courseName + " " + creditHours + " " + term;
     }
 }

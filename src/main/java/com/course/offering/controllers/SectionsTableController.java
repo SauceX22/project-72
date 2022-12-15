@@ -7,16 +7,10 @@ import com.course.offering.models.Section;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 
 public class SectionsTableController {
     private static SectionsTableController instance = null;
@@ -115,8 +109,16 @@ public class SectionsTableController {
         statusColumn.setCellValueFactory(new PropertyValueFactory<Section, HBox>("status"));
         // statusColumn.setResizable(false);
 
-        table.getColumns().addAll(courseNameColumn, sectionColumn, activityColumn, crnColumn, courseFullNameColumn,
-                instructorColumn, daysColumn, timeColumn, locationColumn, statusColumn);
+        table.getColumns().add(courseNameColumn);
+        table.getColumns().add(sectionColumn);
+        table.getColumns().add(activityColumn);
+        table.getColumns().add(crnColumn);
+        table.getColumns().add(courseFullNameColumn);
+        table.getColumns().add(instructorColumn);
+        table.getColumns().add(daysColumn);
+        table.getColumns().add(timeColumn);
+        table.getColumns().add(locationColumn);
+        table.getColumns().add(statusColumn);
     }
 
 }

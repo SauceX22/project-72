@@ -222,7 +222,6 @@ public class App extends Application {
 
     private void initBasketPane() {
         // Adding components, smallest to largest
-        // TODO: Pass the basket items to this constructor
         VBox basketItemsContainer = BasketController.getInstance().getBasketButtonsContainer();
         ScrollPane scrollPane = new ScrollPane(basketItemsContainer);
         AnchorPane anchorPane = new AnchorPane(scrollPane);
