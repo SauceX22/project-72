@@ -14,6 +14,6 @@ You should never care about such outdated codebase built on a useless framework 
 
 The workspace is completely and flawlessly organized as its obvious, where:
 
--   `controllers`: contains class controllers for things such as the schedule in the second page
--   `models`: contains class models, such as Course, Section, and Lecture
--   `utils`: holds important utility tools for our application
+-   `controllers`: contains class controllers for things such as the schedule in the second page.
+-   `models`: contains class models, such as Course, Section, and Lecture.
+-   `utils`: holds important utility tools for our application.
