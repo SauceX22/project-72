@@ -35,8 +35,6 @@ import javafx.stage.Stage;
 
 public class App extends Application {
 
-    // TODO sort this mess of a file
-
     private BorderPane root;
     // private TableView table;
     private GridPane grid;
@@ -59,7 +57,6 @@ public class App extends Application {
         FileController.Initialize(student);
 
         initFirstPageUI();
-        // initSecondPageUI();
 
         scene = new Scene(root, 1200, 750);
         primaryStage.setScene(scene);
