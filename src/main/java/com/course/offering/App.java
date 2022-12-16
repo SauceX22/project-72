@@ -166,24 +166,32 @@ public class App extends Application {
         BorderPane.setMargin(table, new Insets(5));
         BorderPane.setMargin(top, new Insets(5));
 
+        SectionsTableController.getInstance().setItems(student.getValidSections());
+
         loadButton.setOnAction(e -> {
             ArrayList<Section> loadedSections = FileController.readScheduleSections(primaryStage, loadButton);
             for (Section section : loadedSections) {
                 BasketController.getInstance().addSection(section);
-                top.setText("Sections in basket : " + BasketController.getInstance().getBasketSections().size());
 
-                // //System.out.println(table.getItems().indexOf(section));
+                for (Section studentSec : student.getValidSections()) {
+                    if(studentSec.getCRN().compareTo(section.getCRN())==0){
+                        System.out.println(studentSec);
+                        studentSec.getStatus().setStyle("-fx-background-color: #baffba;");
+                    }
+                }
                 // //System.out.println(BasketController.getInstance().getBasketSections().get(
-                // // BasketController.getInstance().getBasketSections().indexOf(section)
-                // //));
-                // //student.getValidSections().get(0);
-            }
-            System.out.println(BasketController.getInstance().getBasketSections());
-        });
-
-        nextButton.setOnAction(e -> {
-            initSecondPageUI();
-        });
+                    // // BasketController.getInstance().getBasketSections().indexOf(section)
+                    // //));
+                    // //student.getValidSections().get(0);
+                }
+                top.setText("Sections in basket : " + BasketController.getInstance().getBasketSections().size());
+                System.out.println(BasketController.getInstance().getBasketSections());
+            });
+            
+            nextButton.setOnAction(e -> {
+                initSecondPageUI();
+            });
+            
 
         table.setRowFactory(tv -> new TableRow<Section>() {
             @Override
@@ -233,7 +241,6 @@ public class App extends Application {
             }
         });
 
-        SectionsTableController.getInstance().setItems(student.getValidSections());
     }
 
     private void initSecondPageUI() {
