@@ -131,18 +131,6 @@ public class App extends Application {
         loadButton.setPrefSize(80, 40);
         loadButton.setAlignment(Pos.CENTER);
         hBoxTop.getChildren().add(loadButton);
-        loadButton.setOnAction(e -> {
-            ArrayList<Section> loadedSections = FileController.readScheduleSections(primaryStage, loadButton);
-            for (Section section : loadedSections) {
-                BasketController.getInstance().addSection(section);
-                // //System.out.println(table.getItems().indexOf(section));
-                // //System.out.println(BasketController.getInstance().getBasketSections().get(
-                // // BasketController.getInstance().getBasketSections().indexOf(section)
-                // //));
-                // //student.getValidSections().get(0);
-            }
-            // System.out.println(BasketController.getInstance().getBasketSections());
-        });
 
         Label top = createLabel("Sections in basket : 0", "#ffd0fe");
         top.setAlignment(Pos.CENTER);
@@ -178,6 +166,21 @@ public class App extends Application {
         BorderPane.setMargin(table, new Insets(5));
         BorderPane.setMargin(top, new Insets(5));
 
+        loadButton.setOnAction(e -> {
+            ArrayList<Section> loadedSections = FileController.readScheduleSections(primaryStage, loadButton);
+            for (Section section : loadedSections) {
+                BasketController.getInstance().addSection(section);
+                top.setText("Sections in basket : " + BasketController.getInstance().getBasketSections().size());
+
+                // //System.out.println(table.getItems().indexOf(section));
+                // //System.out.println(BasketController.getInstance().getBasketSections().get(
+                // // BasketController.getInstance().getBasketSections().indexOf(section)
+                // //));
+                // //student.getValidSections().get(0);
+            }
+            System.out.println(BasketController.getInstance().getBasketSections());
+        });
+
         nextButton.setOnAction(e -> {
             initSecondPageUI();
         });
@@ -186,8 +189,8 @@ public class App extends Application {
             @Override
             protected void updateItem(Section item, boolean empty) {
                 super.updateItem(item, empty);
-                int rowIndex = table.getSelectionModel().getSelectedIndex();
                 top.setText("Sections in basket : " + BasketController.getInstance().getBasketSections().size());
+                int rowIndex = table.getSelectionModel().getSelectedIndex();
                 // student.getValidSections().get(rowIndex);
                 if (rowIndex != -1) {
                     table.setOnMouseClicked(e -> {

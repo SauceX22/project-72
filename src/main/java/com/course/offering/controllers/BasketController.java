@@ -35,8 +35,6 @@ public class BasketController {
     public void addSection(Section section) {
         this.basketSections.add(section);
         Button sectionButton = section.getBasketButton();
-        if (basketButtonsContainer == null)
-            basketButtonsContainer = new VBox();
         basketButtonsContainer.getChildren().add(sectionButton);
         sectionButton.setOnAction(e -> {
             ScheduleController.getInstance().addSection(section);
