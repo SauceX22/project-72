@@ -135,13 +135,13 @@ public class App extends Application {
             ArrayList<Section> loadedSections = FileController.readScheduleSections(primaryStage, loadButton);
             for (Section section : loadedSections) {
                 BasketController.getInstance().addSection(section);
-                //System.out.println(table.getItems().indexOf(section));
-                //System.out.println(BasketController.getInstance().getBasketSections().get(
-                //    BasketController.getInstance().getBasketSections().indexOf(section)
-                //));
-                //student.getValidSections().get(0);
+                // //System.out.println(table.getItems().indexOf(section));
+                // //System.out.println(BasketController.getInstance().getBasketSections().get(
+                // // BasketController.getInstance().getBasketSections().indexOf(section)
+                // //));
+                // //student.getValidSections().get(0);
             }
-            System.out.println(BasketController.getInstance().getBasketSections());
+            // System.out.println(BasketController.getInstance().getBasketSections());
         });
 
         Label top = createLabel("Sections in basket : 0", "#ffd0fe");
@@ -188,7 +188,7 @@ public class App extends Application {
                 super.updateItem(item, empty);
                 int rowIndex = table.getSelectionModel().getSelectedIndex();
                 top.setText("Sections in basket : " + BasketController.getInstance().getBasketSections().size());
-                //student.getValidSections().get(rowIndex);
+                // student.getValidSections().get(rowIndex);
                 if (rowIndex != -1) {
                     table.setOnMouseClicked(e -> {
                         try {

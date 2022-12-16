@@ -171,7 +171,7 @@ public class FileController {
     private static File chooseSavedFile(Stage stage, Button button) {
         FileChooser fileChooser = new FileChooser();
 
-        fileChooser.getExtensionFilters().add(new ExtensionFilter("All Files", "*.bin"));
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("All Files", "*.dat"));
         fileChooser.setInitialDirectory(new File(lastVisitedDirectory));
         // get the file selected
         File file = fileChooser.showOpenDialog(stage);
@@ -186,7 +186,7 @@ public class FileController {
     private static File chooseSavingLocation(Stage stage) {
         FileChooser fileChooser = new FileChooser();
 
-        fileChooser.getExtensionFilters().add(new ExtensionFilter("All Files", "*.bin"));
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("All Files", "*.dat"));
         fileChooser.setInitialDirectory(new File(lastVisitedDirectory));
         // get the file selected
         File file = fileChooser.showSaveDialog(stage);
