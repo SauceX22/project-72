@@ -105,7 +105,7 @@ public class SectionsTableController {
         locationColumn = new TableColumn<Section, String>("Location");
         locationColumn.setCellValueFactory(new PropertyValueFactory<Section, String>("location"));
 
-        statusColumn = new TableColumn<Section, HBox>("Status");
+        statusColumn = new TableColumn<Section, HBox>("In-basket");
         statusColumn.setCellValueFactory(new PropertyValueFactory<Section, HBox>("status"));
         // statusColumn.setResizable(false);
 

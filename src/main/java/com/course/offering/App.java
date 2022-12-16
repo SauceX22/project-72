@@ -1,6 +1,7 @@
 package com.course.offering;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import com.course.offering.controllers.BasketController;
 import com.course.offering.controllers.FileController;
@@ -118,11 +119,36 @@ public class App extends Application {
 
         root.setBackground(new Background(new BackgroundFill(Color.WHITESMOKE, CornerRadii.EMPTY, Insets.EMPTY)));
 
+        HBox hBoxTop = new HBox();
+        hBoxTop.setSpacing(5);
+        hBoxTop.setPadding(new Insets(5));
+        hBoxTop.setAlignment(Pos.BASELINE_CENTER);
+        hBoxTop.setBackground(new Background(new BackgroundFill(Color.ORANGE, CornerRadii.EMPTY, Insets.EMPTY)));
+
+        root.setTop(hBoxTop);
+
+        Button loadButton = new Button("Load");
+        loadButton.setPrefSize(80, 40);
+        loadButton.setAlignment(Pos.CENTER);
+        hBoxTop.getChildren().add(loadButton);
+        loadButton.setOnAction(e -> {
+            ArrayList<Section> loadedSections = FileController.readScheduleSections(primaryStage, loadButton);
+            for (Section section : loadedSections) {
+                //BasketController.getInstance().addSection(section);
+                System.out.println(table.getItems().indexOf(section));
+                //System.out.println(BasketController.getInstance().getBasketSections().get(
+                //    BasketController.getInstance().getBasketSections().indexOf(section)
+                //));
+                //student.getValidSections().get(0);
+            }
+            System.out.println(BasketController.getInstance().getBasketSections());
+        });
+
         Label top = createLabel("Sections in basket : 0", "#ffd0fe");
         top.setAlignment(Pos.CENTER);
         top.setMinSize(50, 50);
         top.setBackground(new Background(new BackgroundFill(Color.ORANGE, CornerRadii.EMPTY, Insets.EMPTY)));
-        root.setTop(top);
+        hBoxTop.getChildren().add(top);
 
         Button nextButton = new Button("Next");
         Button addButton = new Button("Add");
@@ -162,6 +188,7 @@ public class App extends Application {
                 super.updateItem(item, empty);
                 int rowIndex = table.getSelectionModel().getSelectedIndex();
                 top.setText("Sections in basket : " + BasketController.getInstance().getBasketSections().size());
+                //student.getValidSections().get(rowIndex);
                 if (rowIndex != -1) {
                     table.setOnMouseClicked(e -> {
                         try {
