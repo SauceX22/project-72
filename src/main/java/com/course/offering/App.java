@@ -134,8 +134,8 @@ public class App extends Application {
         loadButton.setOnAction(e -> {
             ArrayList<Section> loadedSections = FileController.readScheduleSections(primaryStage, loadButton);
             for (Section section : loadedSections) {
-                //BasketController.getInstance().addSection(section);
-                System.out.println(table.getItems().indexOf(section));
+                BasketController.getInstance().addSection(section);
+                //System.out.println(table.getItems().indexOf(section));
                 //System.out.println(BasketController.getInstance().getBasketSections().get(
                 //    BasketController.getInstance().getBasketSections().indexOf(section)
                 //));
