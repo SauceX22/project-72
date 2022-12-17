@@ -101,7 +101,8 @@ public class App extends Application {
         // Bottom Pane Setup
         HBox.setMargin(saveScheduleButton, General_INSETS);
         bottomPane.setAlignment(Pos.CENTER_LEFT);
-        bottomPane.setStyle("-fx-background-color: #eb8d13");
+        //bottomPane.setStyle("-fx-background-color: #eb8d13");
+        bottomPane.setBackground(new Background(new BackgroundFill(Color.DARKBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 
         saveScheduleButton.setOnAction(e -> {
             FileController.saveScheduleSections(ScheduleController.getScheduleSections(), primaryStage);
@@ -123,7 +124,7 @@ public class App extends Application {
         hBoxTop.setSpacing(5);
         hBoxTop.setPadding(new Insets(5));
         hBoxTop.setAlignment(Pos.BASELINE_CENTER);
-        hBoxTop.setBackground(new Background(new BackgroundFill(Color.ORANGE, CornerRadii.EMPTY, Insets.EMPTY)));
+        hBoxTop.setBackground(new Background(new BackgroundFill(Color.DARKBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 
         root.setTop(hBoxTop);
 
@@ -133,9 +134,10 @@ public class App extends Application {
         hBoxTop.getChildren().add(loadButton);
 
         Label top = createLabel("Sections in basket : 0", "#ffd0fe");
+        top.setTextFill(Color.WHITE);
         top.setAlignment(Pos.CENTER);
         top.setMinSize(50, 50);
-        top.setBackground(new Background(new BackgroundFill(Color.ORANGE, CornerRadii.EMPTY, Insets.EMPTY)));
+        //top.setBackground(new Background(new BackgroundFill(Color.ORANGE, CornerRadii.EMPTY, Insets.EMPTY)));
         hBoxTop.getChildren().add(top);
 
         Button nextButton = new Button("Next");
@@ -149,7 +151,7 @@ public class App extends Application {
         hBox.setPadding(new Insets(5));
         nextButton.setAlignment(Pos.CENTER);
         hBox.setAlignment(Pos.BASELINE_RIGHT);
-        hBox.setBackground(new Background(new BackgroundFill(Color.ORANGE, CornerRadii.EMPTY, Insets.EMPTY)));
+        hBox.setBackground(new Background(new BackgroundFill(Color.DARKBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
         hBox.getChildren().addAll(addButton, removeButton, nextButton);
         root.setBottom(hBox);
         addButton.setAlignment(Pos.CENTER);
