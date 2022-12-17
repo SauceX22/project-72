@@ -1,7 +1,5 @@
 package com.course.offering.models;
 
-import java.util.ArrayList;
-
 public class Course {
     private String courseName;
     private String creditHours;

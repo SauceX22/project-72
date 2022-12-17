@@ -60,9 +60,11 @@ public class App extends Application {
         initFirstPageUI();
 
         scene = new Scene(root, 1200, 750);
-        primaryStage.setScene(scene);
 
-        primaryStage.setTitle("KFUPM Course Offering");
+        primaryStage.setScene(scene);
+        primaryStage.setMinWidth(750);
+        primaryStage.setMinHeight(500);
+        primaryStage.setTitle("Project-72 Course Offering");
         primaryStage.show();
     }
 
@@ -101,7 +103,7 @@ public class App extends Application {
         // Bottom Pane Setup
         HBox.setMargin(saveScheduleButton, General_INSETS);
         bottomPane.setAlignment(Pos.CENTER_LEFT);
-        //bottomPane.setStyle("-fx-background-color: #eb8d13");
+        // bottomPane.setStyle("-fx-background-color: #eb8d13");
         bottomPane.setBackground(new Background(new BackgroundFill(Color.DARKBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 
         saveScheduleButton.setOnAction(e -> {
@@ -122,7 +124,7 @@ public class App extends Application {
 
         HBox hBoxTop = new HBox();
         hBoxTop.setSpacing(5);
-        hBoxTop.setPadding(new Insets(5));
+        hBoxTop.setPadding(new Insets(12, 0, 0, 12));
         hBoxTop.setAlignment(Pos.BASELINE_CENTER);
         hBoxTop.setBackground(new Background(new BackgroundFill(Color.DARKBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 
@@ -132,12 +134,14 @@ public class App extends Application {
         loadButton.setPrefSize(80, 40);
         loadButton.setAlignment(Pos.CENTER);
         hBoxTop.getChildren().add(loadButton);
+        hBoxTop.setAlignment(Pos.BASELINE_CENTER);
 
         Label top = createLabel("Sections in basket : 0", "#ffd0fe");
         top.setTextFill(Color.WHITE);
         top.setAlignment(Pos.CENTER);
         top.setMinSize(50, 50);
-        //top.setBackground(new Background(new BackgroundFill(Color.ORANGE, CornerRadii.EMPTY, Insets.EMPTY)));
+        // top.setBackground(new Background(new BackgroundFill(Color.ORANGE,
+        // CornerRadii.EMPTY, Insets.EMPTY)));
         hBoxTop.getChildren().add(top);
 
         Button nextButton = new Button("Next");
@@ -216,7 +220,7 @@ public class App extends Application {
                                 removeButton.setDisable(false);
                             }
                         } catch (Exception ex) {
-                            System.out.println(ex.getMessage());
+                            // System.out.println(ex.getMessage());
                         }
                     });
                     removeButton.setOnAction(e -> {
