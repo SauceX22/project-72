@@ -8,7 +8,6 @@ import com.course.offering.utils.ScheduleTimeConverter;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -33,7 +32,7 @@ public class Section implements Serializable {
     // These are for displaying in the table
     private transient ArrayList<Lecture> lectures = new ArrayList<>();
 
-    private transient Button basketButton;
+    private SerializableButton basketButton;
     private double basketItemHeight = 120;
 
     public ArrayList<Lecture> getLectures() {
@@ -139,8 +138,8 @@ public class Section implements Serializable {
                 " Day " + days + " Time " + time + " location " + location;
     }
 
-    public Button createBaskeButton() {
-        Button button = new Button();
+    public SerializableButton createBaskeButton() {
+        SerializableButton button = new SerializableButton();
         BorderPane sectionData = new BorderPane();
 
         // Top
@@ -206,9 +205,7 @@ public class Section implements Serializable {
         return button;
     }
 
-    public Button getBasketButton() {
-        if (basketButton == null)
-            basketButton = createBaskeButton();
+    public SerializableButton getBasketButton() {
         return basketButton;
     }
 
@@ -262,6 +259,10 @@ public class Section implements Serializable {
             return true;
 
         return false;
+    }
+
+    public void updateButton() {
+        this.basketButton = createBaskeButton();
     }
 
 }

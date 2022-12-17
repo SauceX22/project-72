@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.course.offering.models.Section;
 
+import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -22,18 +23,15 @@ public class BasketController {
 
     private VBox basketButtonsContainer;
 
-    private BasketController() {
-        initializeBasketMenu();
-    }
-
     public ArrayList<Section> getBasketSections() {
+        if (basketSections == null)
+            this.basketSections = new ArrayList<Section>();
         return this.basketSections;
     }
 
     public void addSection(Section section) {
         this.basketSections.add(section);
         Button sectionButton = section.getBasketButton();
-        basketButtonsContainer.getChildren().add(sectionButton);
         sectionButton.setOnAction(e -> {
             ScheduleController.getInstance().addSection(section);
             for (Section basketSection : basketSections) {
@@ -51,26 +49,22 @@ public class BasketController {
     }
 
     public void removeSection(Section section) {
-        this.basketSections.remove(section);
-        basketButtonsContainer.getChildren().remove(section.getBasketButton());
+        this.basketSections.removeIf(e -> section.getCRN().equals(e.getCRN()));
     }
 
     public void removeSection(int index) {
         this.basketSections.remove(index);
-        basketButtonsContainer.getChildren().remove(index);
     }
 
     public VBox getBasketButtonsContainer() {
-        return basketButtonsContainer;
-    }
-
-    public void initializeBasketMenu() {
         basketButtonsContainer = new VBox();
         basketButtonsContainer.setAlignment(Pos.CENTER);
         basketButtonsContainer.setMaxWidth(Double.MAX_VALUE);
         basketButtonsContainer.setMaxHeight(Double.MAX_VALUE);
-
-        this.basketSections = new ArrayList<>();
+        for (Section section : basketSections) {
+            basketButtonsContainer.getChildren().add(section.getBasketButton());
+        }
+        return basketButtonsContainer;
     }
 
     public void updateAvailability() {
@@ -89,6 +83,5 @@ public class BasketController {
 
     public void clearBasket() {
         basketSections.clear();
-        basketButtonsContainer.getChildren().clear();
     }
 }

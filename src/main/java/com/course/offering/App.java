@@ -169,10 +169,11 @@ public class App extends Application {
             ArrayList<Section> loadedSections = FileController.readScheduleSections(primaryStage, loadButton);
             for (Section section : BasketController.getInstance().getBasketSections()) {
                 section.getStatus().setStyle("-fx-background-color: #F5F5F5;");
-                BasketController.getInstance().removeSection(section);
             }
+            BasketController.getInstance().clearBasket();
 
             for (Section loadedSection : loadedSections) {
+                loadedSection.updateButton();
                 BasketController.getInstance().addSection(loadedSection);
                 for (Section studentSec : student.getValidSections()) {
                     if (studentSec.getCRN().compareTo(loadedSection.getCRN()) == 0) {

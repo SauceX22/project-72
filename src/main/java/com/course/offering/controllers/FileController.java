@@ -162,8 +162,7 @@ public class FileController {
         } catch (IOException | ClassNotFoundException e) {
             System.err.println(e);
         }
-        return null;
-
+        return new ArrayList<>();
     }
 
     private static String lastVisitedDirectory = System.getProperty("user.home");
