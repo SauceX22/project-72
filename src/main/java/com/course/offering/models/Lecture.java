@@ -170,7 +170,7 @@ public class Lecture extends BorderPane {
 
         // this.setPadding(new Insets(2));
         this.setRight(right);
-        this.setStyle("-fx-background-color: #f34839; -fx-background-radius: 5;");
+        this.setStyle("-fx-background-color: #D91681; -fx-background-radius: 5;");
 
     }
 

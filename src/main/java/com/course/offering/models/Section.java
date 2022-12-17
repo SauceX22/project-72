@@ -168,7 +168,7 @@ public class Section implements Serializable {
         footer.setAlignment(Pos.CENTER);
         BorderPane.setMargin(footer, new Insets(0, 0, 0, 0));
         sectionData.setBottom(footer);
-        sectionData.getBottom().setStyle("-fx-background-color: #eb8d13");
+        sectionData.getBottom().setStyle("-fx-background-color: #00008b");
 
         // Center
         VBox center = new VBox();
