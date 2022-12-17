@@ -174,24 +174,21 @@ public class App extends Application {
                 BasketController.getInstance().addSection(section);
 
                 for (Section studentSec : student.getValidSections()) {
-                    if(studentSec.getCRN().compareTo(section.getCRN())==0){
+                    if (studentSec.getCRN().compareTo(section.getCRN()) == 0) {
                         System.out.println(studentSec);
+
                         studentSec.getStatus().setStyle("-fx-background-color: #baffba;");
                     }
                 }
-                // //System.out.println(BasketController.getInstance().getBasketSections().get(
-                    // // BasketController.getInstance().getBasketSections().indexOf(section)
-                    // //));
-                    // //student.getValidSections().get(0);
-                }
-                top.setText("Sections in basket : " + BasketController.getInstance().getBasketSections().size());
-                System.out.println(BasketController.getInstance().getBasketSections());
-            });
-            
-            nextButton.setOnAction(e -> {
-                initSecondPageUI();
-            });
-            
+                loadButton.setDisable(true);
+            }
+            top.setText("Sections in basket : " + BasketController.getInstance().getBasketSections().size());
+            System.out.println(BasketController.getInstance().getBasketSections());
+        });
+
+        nextButton.setOnAction(e -> {
+            initSecondPageUI();
+        });
 
         table.setRowFactory(tv -> new TableRow<Section>() {
             @Override

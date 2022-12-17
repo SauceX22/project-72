@@ -30,16 +30,20 @@ public class Section implements Serializable {
     private transient HBox status;
 
     // These are for displaying in the table
-    private ArrayList<Lecture> lectures = new ArrayList<>();
+    private transient ArrayList<Lecture> lectures = new ArrayList<>();
 
-    private BasketButtonSavable basketButton;
+    private transient Button basketButton;
     private double basketItemHeight = 120;
 
     public ArrayList<Lecture> getLectures() {
+        if (lectures == null)
+            setLectures();
         return lectures;
     }
 
     private void setLectures() {
+        if (lectures == null)
+            lectures = new ArrayList<Lecture>();
         if (getTime().equals("None") || getDays().equals("None"))
             return;
 
@@ -81,10 +85,6 @@ public class Section implements Serializable {
 
     public HBox getStatus() {
         return status;
-    }
-
-    public void setStatus(HBox status) {
-        this.status = status;
     }
 
     public String getCourseName() {
@@ -133,8 +133,8 @@ public class Section implements Serializable {
         // " Day " + days + " Time " + time + " location " + location;
     }
 
-    public BasketButtonSavable createBaskeButton() {
-        BasketButtonSavable button = new BasketButtonSavable();
+    public Button createBaskeButton() {
+        Button button = new Button();
         BorderPane sectionData = new BorderPane();
 
         // Top
@@ -198,41 +198,55 @@ public class Section implements Serializable {
     }
 
     public Button getBasketButton() {
+        if (basketButton == null)
+            basketButton = createBaskeButton();
         return basketButton;
     }
 
+    // Check for conflicts
     public boolean isConflict(Section section) {
-        // A section is a conflict if
-        // same course with same type of section (Lec/Rec/Lab)
-        // or other course with same time and ANY of the days matching the
+        // Same course and same type of activity
         if (getCourseName().equals(section.getCourseName()))
             if (getActivity().equals(section.getActivity()))
                 return true;
 
+        // Same days and time
+        if (daysConflict(section))
+            if (timeConflict(section))
+                return true;
+
+        return false;
+    }
+
+    private boolean daysConflict(Section section) {
+        if (section.getDays().equals(this.getDays()))
+
+            for (char day : this.getDays().toCharArray())
+                if (section.getDays().contains(day + ""))
+                    return true;
+
+        return false;
+    }
+
+    private boolean timeConflict(Section section) {
         if (getTime().equals(section.getTime()))
-            for (char day : getDays().toCharArray())
-                for (char otherDay : section.getDays().toCharArray())
-                    if (day == otherDay)
-                        return true;
+            return true;
 
         int basketRowIndex = section.getLectures().get(0).getRowIndex();
         int basketRowSpan = section.getLectures().get(0).getRowSpan();
         int tableItemRowIndex = getLectures().get(0).getRowIndex();
         int tableItemRowSpan = getLectures().get(0).getRowSpan();
 
-        for (char day : getDays().toCharArray()) {
-            if (section.getDays().contains(day + "")) {
-                if (basketRowIndex == tableItemRowIndex)
-                    return true;
+        if (basketRowIndex == tableItemRowIndex)
+            return true;
 
-                if (basketRowIndex < tableItemRowIndex && ((basketRowIndex + basketRowSpan) >= tableItemRowIndex))
-                    return true;
+        if (basketRowIndex < tableItemRowIndex && ((basketRowIndex + basketRowSpan) >= tableItemRowIndex))
+            return true;
 
-                if (basketRowIndex > tableItemRowIndex
-                        && ((basketRowIndex + basketRowSpan) <= (tableItemRowIndex + tableItemRowSpan)))
-                    return true;
-            }
-        }
+        if (basketRowIndex > tableItemRowIndex
+                && ((basketRowIndex + basketRowSpan) <= (tableItemRowIndex + tableItemRowSpan)))
+            return true;
+
         return false;
     }
 

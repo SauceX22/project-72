@@ -178,7 +178,7 @@ public class FileController {
 
         lastVisitedDirectory = (file != null) ? file.getParent() : System.getProperty("user.home");
         if (file != null)
-            button.setText(file.getAbsolutePath() + "  selected");
+            button.setText(file.getName() + "  selected");
 
         return file;
     }

@@ -1,22 +1,21 @@
 package com.course.offering.models;
 
-import java.io.Serializable;
 import java.time.DayOfWeek;
 
 import com.course.offering.controllers.ScheduleController;
 import com.course.offering.utils.ScheduleTimeConverter;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 
-public class Lecture extends BorderPane implements Serializable {
+public class Lecture extends BorderPane {
 
     private final Section section;
     private final DayOfWeek day;
@@ -97,32 +96,82 @@ public class Lecture extends BorderPane implements Serializable {
         this.colIndex = ScheduleTimeConverter.dayOfWeekTOIndex(day);
         this.rowSpan = ScheduleTimeConverter.timeIntervalToRowSpan(startTime24, endTime24);
 
-        setLectureNode();
+        createLectureNode();
     }
 
-    private void setLectureNode() {
-        // Button button = new Button(getCourse());
-        Label label = new Label(getCourseName());
-        Button removeButton = new Button("Remove");
+    private void createLectureNode() {
+        // Top
+        HBox header = new HBox();
+        Label sectionCName = new Label(section.getCourseName() + "-" + section.getSectionNumber());
+        Label sectionCRN = new Label(section.getCRN());
+        Label sectionActivity = new Label(section.getActivity());
+        Region headerSplit1 = new Region();
+        Region headerSplit2 = new Region();
+        HBox.setHgrow(headerSplit1, Priority.ALWAYS);
+        HBox.setHgrow(headerSplit2, Priority.ALWAYS);
+        header.getChildren().addAll(sectionCName, headerSplit1, sectionCRN, headerSplit2, sectionActivity);
+        header.setMinWidth(this.getWidth());
+        header.setMaxWidth(Double.MAX_VALUE);
+        header.setAlignment(Pos.CENTER);
+        header.setStyle("-fx-background-color: #e0e0e0; -fx-background-radius: 3;");
+        this.setTop(header);
+        BorderPane.setMargin(header, new Insets(2));
 
+        // Bottom
+        HBox footer = new HBox();
+        Label sectionDays = new Label(section.getDays());
+        Label sectionTime = new Label(section.getTime());
+        Label sectionLoc = new Label(getLocation());
+        Region footerSplit1 = new Region();
+        Region footerSplit2 = new Region();
+        HBox.setHgrow(footerSplit1, Priority.ALWAYS);
+        HBox.setHgrow(footerSplit2, Priority.ALWAYS);
+        footer.setStyle("-fx-background-color: #e0e0e0; -fx-background-radius: 3;");
+        footer.getChildren().addAll(sectionDays, footerSplit1, sectionTime, footerSplit2, sectionLoc);
+        footer.setMinWidth(this.getWidth());
+
+        footer.setMaxWidth(Double.MAX_VALUE);
+        footer.setAlignment(Pos.CENTER);
+        BorderPane.setMargin(footer, new Insets(2));
+        this.setBottom(footer);
+        // this.getBottom().setStyle("-fx-background-color: #eb8d13");
+
+        // Center
+        VBox center = new VBox();
+        Label sectionInstructor = new Label(getInstructor());
+        Region centerSplit1 = new Region();
+        Region centerSplit2 = new Region();
+        VBox.setVgrow(centerSplit1, Priority.ALWAYS);
+        VBox.setVgrow(centerSplit2, Priority.ALWAYS);
+        sectionInstructor.setStyle("-fx-background-color: #e0e0e0; -fx-background-radius: 3;");
+
+        center.getChildren().addAll(centerSplit1, sectionInstructor, centerSplit2);
+        center.setMinWidth(this.getMinWidth());
+        center.setMaxWidth(Double.MAX_VALUE);
+        center.setAlignment(Pos.CENTER);
+        this.setCenter(center);
+        BorderPane.setMargin(center, new Insets(2));
+
+        // Right
+        VBox right = new VBox();
+        Button removeButton = new Button("Remove");
         removeButton.setOnAction(e -> {
             ScheduleController.getInstance().removeSection(getSection());
         });
-        this.setMaxWidth(Double.MAX_VALUE);
-        this.setMaxHeight(Double.MAX_VALUE);
-        this.setMinHeight(80);
-        this.setCenter(label);
-        this.setRight(removeButton);
-        this.setStyle("-fx-background-color: #f34839;" +
-                "-fx-background-radius: 15;" +
-                "");
-        this.setBorder(
-                new Border(new BorderStroke(Color.valueOf(ScheduleController.getInstance().getOutlineColor()),
-                        BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
-                        new BorderWidths(ScheduleController.getInstance().getBorderWidth()))));
-        // label.setOnAction(e -> {
-        // System.out.println(e.getSource().getClass() + " was clicked");
-        // });
+        Region rightSplit1 = new Region();
+        Region rightSplit2 = new Region();
+        VBox.setVgrow(rightSplit1, Priority.ALWAYS);
+        VBox.setVgrow(rightSplit2, Priority.ALWAYS);
+        BorderPane.setMargin(right, new Insets(2));
+        right.setMaxWidth(Double.MAX_VALUE);
+        right.setMaxHeight(Double.MAX_VALUE);
+        right.getChildren().addAll(rightSplit1, removeButton, rightSplit2);
+        removeButton.setStyle("-fx-background-radius: 8;");
+
+        // this.setPadding(new Insets(2));
+        this.setRight(right);
+        this.setStyle("-fx-background-color: #f34839; -fx-background-radius: 5;");
+
     }
 
     @Override
