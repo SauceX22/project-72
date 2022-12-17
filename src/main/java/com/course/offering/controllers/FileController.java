@@ -13,9 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
 
-import com.course.offering.models.Course;
 import com.course.offering.models.DegreePlanCourse;
 import com.course.offering.models.FinishedCourse;
 import com.course.offering.models.Section;
