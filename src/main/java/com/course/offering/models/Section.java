@@ -15,6 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 public class Section implements Serializable {
 
@@ -170,6 +171,9 @@ public class Section implements Serializable {
         footer.getChildren().addAll(sectionDays, footerSplit1, sectionTime, footerSplit2, sectionLoc);
         footer.setMinWidth(sectionData.getWidth());
 
+        sectionDays.setTextFill(Color.WHITE);
+        sectionTime.setTextFill(Color.WHITE);
+        sectionLoc.setTextFill(Color.WHITE);
         footer.setMaxWidth(Double.MAX_VALUE);
         footer.setAlignment(Pos.CENTER);
         BorderPane.setMargin(footer, new Insets(0, 0, 0, 0));
