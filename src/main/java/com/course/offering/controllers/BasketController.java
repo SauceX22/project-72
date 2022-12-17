@@ -37,7 +37,7 @@ public class BasketController {
         sectionButton.setOnAction(e -> {
             ScheduleController.getInstance().addSection(section);
             for (Section basketSection : basketSections) {
-                if (basketSection.isConflict(section)) {
+                if (section.isConflict(basketSection)) {
                     basketSection.getBasketButton().setDisable(true);
                 }
             }

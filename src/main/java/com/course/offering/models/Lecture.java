@@ -56,6 +56,10 @@ public class Lecture extends BorderPane {
         return day;
     }
 
+    public String getEndTime24() {
+        return endTime24;
+    }
+
     public String getStartTime24() {
         return startTime24;
     }

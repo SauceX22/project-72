@@ -214,6 +214,8 @@ public class Section implements Serializable {
 
     // Check for conflicts
     public boolean isConflict(Section section) {
+        if (getCRN().equals(section.getCRN()))
+            return true;
         // Same course and same type of activity
         if (getCourseName().equals(section.getCourseName()))
             if (getActivity().equals(section.getActivity()))
@@ -229,10 +231,10 @@ public class Section implements Serializable {
 
     private boolean daysConflict(Section section) {
         if (section.getDays().equals(this.getDays()))
-
-            for (char day : this.getDays().toCharArray())
-                if (section.getDays().contains(day + ""))
-                    return true;
+            return true;
+        for (char day : this.getDays().toCharArray())
+            if (section.getDays().contains(day + ""))
+                return true;
 
         return false;
     }
@@ -241,19 +243,22 @@ public class Section implements Serializable {
         if (getTime().equals(section.getTime()))
             return true;
 
-        int basketRowIndex = section.getLectures().get(0).getRowIndex();
-        int basketRowSpan = section.getLectures().get(0).getRowSpan();
-        int tableItemRowIndex = getLectures().get(0).getRowIndex();
-        int tableItemRowSpan = getLectures().get(0).getRowSpan();
+        int basketStartTime = Integer.parseInt(section.getLectures().get(0).getStartTime24());
+        int basketEndTime = Integer.parseInt(section.getLectures().get(0).getEndTime24());
+        int tableEndTime = Integer.parseInt(getLectures().get(0).getStartTime24());
+        int tableStartTime = Integer.parseInt(getLectures().get(0).getEndTime24());
 
-        if (basketRowIndex == tableItemRowIndex)
+        if (basketStartTime == tableEndTime)
             return true;
 
-        if (basketRowIndex < tableItemRowIndex && ((basketRowIndex + basketRowSpan) >= tableItemRowIndex))
+        boolean startsEarlier = basketStartTime < tableEndTime;
+        boolean endsSameOrAfter = (basketEndTime >= tableEndTime);
+        if (startsEarlier && endsSameOrAfter)
             return true;
 
-        if (basketRowIndex > tableItemRowIndex
-                && ((basketRowIndex + basketRowSpan) <= (tableItemRowIndex + tableItemRowSpan)))
+        boolean startsAfter = basketStartTime > tableEndTime;
+        boolean endsSameOrBefore = (basketEndTime <= tableStartTime);
+        if (startsAfter && endsSameOrBefore)
             return true;
 
         return false;

@@ -120,57 +120,58 @@ public class App extends Application {
         root = new BorderPane();
         root.setBackground(new Background(new BackgroundFill(Color.WHITESMOKE, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        //initializing tableview
+        // initializing tableview
         TableView<Section> table = SectionsTableController.getInstance().getTable();
         BorderPane.setAlignment(table, Pos.CENTER);
         BorderPane.setMargin(table, new Insets(5));
 
-        //initializing top Hbox
+        // initializing top Hbox
         HBox hBoxTop = new HBox();
         hBoxTop.setSpacing(5);
         hBoxTop.setPadding(new Insets(12, 0, 0, 12));
         hBoxTop.setAlignment(Pos.BASELINE_CENTER);
         hBoxTop.setBackground(new Background(new BackgroundFill(Color.DARKBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        //initializing load button and sections in basket label
+        // initializing load button and sections in basket label
         Button loadButton = createBasicButton("Load", 100, 20);
         Label inbasketLabel = createLabel("Sections in basket : 0");
         hBoxTop.getChildren().addAll(inbasketLabel, loadButton);
-        
 
-        //initializing top pane
+        // initializing top pane
         BorderPane topPane = new BorderPane();
         topPane.setBackground(new Background(new BackgroundFill(Color.DARKBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
         topPane.setCenter(inbasketLabel);
         topPane.setRight(loadButton);
-        
-        //initializing bottom buttons 
+
+        // initializing bottom buttons
         Button nextButton = createBasicButton("Next", 80, 40);
         Button addButton = createBasicButton("Add", 80, 40);
         Button removeButton = createBasicButton("Remove", 80, 40);
-        
-        //initializing bottom hbox
+
+        // initializing bottom hbox
         HBox hBoxBottom = new HBox();
         hBoxBottom.setSpacing(5);
         hBoxBottom.setPadding(new Insets(5));
         hBoxBottom.setAlignment(Pos.BASELINE_RIGHT);
         hBoxBottom.setBackground(new Background(new BackgroundFill(Color.DARKBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
         hBoxBottom.getChildren().addAll(addButton, removeButton, nextButton);
-    
-        //adding table and top and bottom hboxes to root
+
+        // adding table and top and bottom hboxes to root
         root.setTop(topPane);
         root.setCenter(table);
         root.setBottom(hBoxBottom);
-        
+
         SectionsTableController.getInstance().setItems(student.getValidSections());
-        
-        //when pressing load button get loaded sections from binary file and put in basket
+
+        // when pressing load button get loaded sections from binary file and put in
+        // basket
         loadButton.setOnAction(e -> {
             ArrayList<Section> loadedSections = FileController.readScheduleSections(primaryStage, loadButton);
-            BasketController.getInstance().clearBasket();
             for (Section section : BasketController.getInstance().getBasketSections()) {
                 section.getStatus().setStyle("-fx-background-color: #F5F5F5;");
+                BasketController.getInstance().removeSection(section);
             }
+
             for (Section loadedSection : loadedSections) {
                 BasketController.getInstance().addSection(loadedSection);
                 for (Section studentSec : student.getValidSections()) {
@@ -182,11 +183,11 @@ public class App extends Application {
             }
             inbasketLabel.setText("Sections in basket : " + BasketController.getInstance().getBasketSections().size());
         });
-        
+
         nextButton.setOnAction(e -> {
             initSecondPageUI();
         });
-        
+
         removeButton.setDisable(true);
         addButton.setDisable(true);
 
@@ -195,8 +196,9 @@ public class App extends Application {
             protected void updateItem(Section item, boolean empty) {
                 super.updateItem(item, empty);
                 int rowIndex = table.getSelectionModel().getSelectedIndex();
-                inbasketLabel.setText("Sections in basket : " + BasketController.getInstance().getBasketSections().size());
-                if (rowIndex != -1) { //section not found
+                inbasketLabel
+                        .setText("Sections in basket : " + BasketController.getInstance().getBasketSections().size());
+                if (rowIndex != -1) { // section not found
                     table.setOnMouseClicked(e -> {
                         try {
                             if (table.getSelectionModel().getSelectedItem().getStatus()
@@ -208,16 +210,18 @@ public class App extends Application {
                                 removeButton.setDisable(false);
                             }
                         } catch (Exception ex) {
-                            //System.out.println(ex.getMessage());
+                            // System.out.println(ex.getMessage());
                         }
                     });
-                    //when remove button is pressed set inbasket color to white and remove section from basket
+                    // when remove button is pressed set inbasket color to white and remove section
+                    // from basket
                     removeButton.setOnAction(e -> {
                         student.getValidSections().get(rowIndex).getStatus().setStyle("-fx-background-color: #F5F5F5;");
                         table.getSelectionModel().clearSelection();
                         BasketController.getInstance().removeSection(item);
                     });
-                    //when add button is pressed set inbasket color to green and add section to basket
+                    // when add button is pressed set inbasket color to green and add section to
+                    // basket
                     addButton.setOnAction(e -> {
                         student.getValidSections().get(rowIndex).getStatus().setStyle("-fx-background-color: #baffba;");
                         table.getSelectionModel().clearSelection();
