@@ -24,8 +24,6 @@ public class BasketController {
 
     private BasketController() {
         initializeBasketMenu();
-        // test with validSections
-        // addSections(basketSections);
     }
 
     public ArrayList<Section> getBasketSections() {
@@ -54,6 +52,7 @@ public class BasketController {
 
     public void removeSection(Section section) {
         this.basketSections.remove(section);
+        basketButtonsContainer.getChildren().remove(section.getBasketButton());
     }
 
     public void removeSection(int index) {
@@ -88,4 +87,8 @@ public class BasketController {
         }
     }
 
+    public void clearBasket() {
+        basketSections.clear();
+        basketButtonsContainer.getChildren().clear();
+    }
 }

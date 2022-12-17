@@ -3,20 +3,22 @@ package com.course.offering.models;
 import java.util.ArrayList;
 
 public class Student {
-    private ArrayList<Course> finishedCourses;
-    private ArrayList<Course> degreePlanCourses;
-    private ArrayList<Course> eligibleCourses;
+    private ArrayList<FinishedCourse> finishedCourses;
+    private ArrayList<DegreePlanCourse> degreePlanCourses;
+    private ArrayList<DegreePlanCourse> eligibleCourses;
     private ArrayList<Section> validSections;
+    private int finishedHours;
+    private String currentStanding;
 
-    public ArrayList<Course> getDegreePlanCourses() {
+    public ArrayList<DegreePlanCourse> getDegreePlanCourses() {
         return degreePlanCourses;
     }
 
-    public ArrayList<Course> getEligibleCourses() {
+    public ArrayList<DegreePlanCourse> getEligibleCourses() {
         return eligibleCourses;
     }
 
-    public ArrayList<Course> getFinishedCourses() {
+    public ArrayList<FinishedCourse> getFinishedCourses() {
         return finishedCourses;
     }
 
@@ -24,15 +26,15 @@ public class Student {
         return validSections;
     }
 
-    public void setDegreePlanCourses(ArrayList<Course> degreePlanCourses) {
+    public void setDegreePlanCourses(ArrayList<DegreePlanCourse> degreePlanCourses) {
         this.degreePlanCourses = degreePlanCourses;
     }
 
-    public void setEligibleCourses(ArrayList<Course> eligibleCourses) {
+    public void setEligibleCourses(ArrayList<DegreePlanCourse> eligibleCourses) {
         this.eligibleCourses = eligibleCourses;
     }
 
-    public void setFinishedCourses(ArrayList<Course> finishedCourses) {
+    public void setFinishedCourses(ArrayList<FinishedCourse> finishedCourses) {
         this.finishedCourses = finishedCourses;
 
     }
@@ -41,4 +43,35 @@ public class Student {
         this.validSections = validSections;
     }
 
+    public int getFinishedHours() {
+        return finishedHours;
+    }
+
+    public void addFinishedHours(int finishedHours) {
+        this.finishedHours += finishedHours;
+    }
+
+    public void setFinishedHours() {
+        for (Course course : degreePlanCourses) {
+            for (Course courseObj : this.getFinishedCourses()) {
+                if (course.getCourseName().equals(courseObj.getCourseName())) {
+                    courseObj.setCreditHours(course.getCreditHours());
+                    addFinishedHours(Integer.parseInt(course.getCreditHours()));
+                }
+            }
+        }
+        if (this.finishedHours >= 97) {
+            setCurrentStanding("Senior Standing");
+        } else if (this.finishedHours > 62) {
+            setCurrentStanding("Junior Standing");
+        }
+    }
+
+    public String getCurrentStanding() {
+        return currentStanding;
+    }
+
+    public void setCurrentStanding(String currentStanding) {
+        this.currentStanding = currentStanding;
+    }
 }

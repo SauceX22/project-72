@@ -16,6 +16,8 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 import com.course.offering.models.Course;
+import com.course.offering.models.DegreePlanCourse;
+import com.course.offering.models.FinishedCourse;
 import com.course.offering.models.Section;
 import com.course.offering.models.Student;
 
@@ -26,20 +28,20 @@ import javafx.stage.Stage;
 
 public class FileController {
 
-    private static ArrayList<Course> finishedCourses = new ArrayList<>();
-    private static ArrayList<Course> degreePlanCourses = new ArrayList<>();
-    private static ArrayList<Course> eligibleCourses = new ArrayList<>();
+    private static ArrayList<FinishedCourse> finishedCourses = new ArrayList<>();
+    private static ArrayList<DegreePlanCourse> degreePlanCourses = new ArrayList<>();
+    private static ArrayList<DegreePlanCourse> eligibleCourses = new ArrayList<>();
     private static ArrayList<Section> validSections = new ArrayList<>();
 
-    public static ArrayList<Course> getFinishedCourses() {
+    public static ArrayList<FinishedCourse> getFinishedCourses() {
         return finishedCourses;
     }
 
-    public static ArrayList<Course> getDegreePlanCourses() {
+    public static ArrayList<DegreePlanCourse> getDegreePlanCourses() {
         return degreePlanCourses;
     }
 
-    public static ArrayList<Course> getEligibleCourses() {
+    public static ArrayList<DegreePlanCourse> getEligibleCourses() {
         return eligibleCourses;
     }
 
@@ -63,21 +65,19 @@ public class FileController {
     private static void getValidSections(Student student) {
         String file = "src\\main\\resources\\CourseOffering.csv";
 
-        try (Scanner scanner = new Scanner(new FileReader(file))) {
-            scanner.nextLine();
-            for (int i = 0; i < getNumOfLines(file) - 1; i++) {
-                String[] line = scanner.nextLine().split(",");
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+            for (int i = 0; i < getNumOfLines(file); i++) {
+                String[] line = bufferedReader.readLine().split(",");
                 if (!line[6].contains("-") && !line[6].equals("None")) {
                     // System.out.println("Skipping line " + i + " Cuz time is bad " + line[6]);
                     continue;
                 }
                 Section section = new Section(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
-                if (section.isEligible(student)) {
+                if (section.isEligable(student)) {
                     validSections.add(section);
                 }
             }
             student.setValidSections(validSections);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -87,17 +87,20 @@ public class FileController {
         String file = "src\\main\\resources\\DegreePlan.csv";
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
-            bufferedReader.readLine();
-            for (int i = 0; i < getNumOfLines(file) - 1; i++) {
+
+            for (int i = 0; i < getNumOfLines(file); i++) {
                 String[] line = bufferedReader.readLine().split(",");
-                // System.out.println(Arrays.toString(line));
-                Course course = new Course(line[0].strip(), line[1].strip(), line[2].strip(), line[3].strip());
+                DegreePlanCourse course = new DegreePlanCourse(line[0].strip(), line[1].strip(), line[2].strip(),
+                        line[3].strip());
                 degreePlanCourses.add(course);
-                if (course.isEligible(student)) {
-                    eligibleCourses.add(course);
-                }
             }
             student.setDegreePlanCourses(degreePlanCourses);
+            student.setFinishedHours();
+            for (DegreePlanCourse courseObj : degreePlanCourses) {
+                if (courseObj.isEligable(student)) {
+                    eligibleCourses.add(courseObj);
+                }
+            }
             student.setEligibleCourses(eligibleCourses);
         } catch (Exception e) {
             e.printStackTrace();
@@ -111,7 +114,7 @@ public class FileController {
 
             for (int i = 0; i < getNumOfLines(file); i++) {
                 String[] line = bufferedReader.readLine().split(",");
-                Course course = new Course(line[0], line[1], line[2]);
+                FinishedCourse course = new FinishedCourse(line[0], line[1], line[2]);
                 finishedCourses.add(course);
             }
             student.setFinishedCourses(finishedCourses);
@@ -139,7 +142,6 @@ public class FileController {
         if (savingLocation == null)
             return;
 
-        // System.out.println("Saving..." + sectionsArr[0]);
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(savingLocation))) {
             outputStream.writeObject(sectionsArr);
             System.out.println("Saving Success!");

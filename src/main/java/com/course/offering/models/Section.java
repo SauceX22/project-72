@@ -74,7 +74,9 @@ public class Section implements Serializable {
         setLectures();
     }
 
-    public boolean isEligible(Student student) {
+    public boolean isEligable(Student student) {
+        if (this.sectionNumber.contains("F"))
+            return false;
         for (Course courseObj : student.getEligibleCourses()) {
             if (this.getCourseName().equals(courseObj.getCourseName())) {
                 return true;
@@ -84,6 +86,10 @@ public class Section implements Serializable {
     }
 
     public HBox getStatus() {
+        if (status == null) {
+            this.status = new HBox();
+            this.status.setStyle("-fx-background-color: #F5F5F5;");
+        }
         return status;
     }
 

@@ -170,11 +170,16 @@ public class App extends Application {
 
         loadButton.setOnAction(e -> {
             ArrayList<Section> loadedSections = FileController.readScheduleSections(primaryStage, loadButton);
-            for (Section section : loadedSections) {
-                BasketController.getInstance().addSection(section);
+            BasketController.getInstance().clearBasket();
+            for (Section section : BasketController.getInstance().getBasketSections()) {
+                section.getStatus().setStyle("-fx-background-color: #F5F5F5;");
+            }
+
+            for (Section loadedSection : loadedSections) {
+                BasketController.getInstance().addSection(loadedSection);
 
                 for (Section studentSec : student.getValidSections()) {
-                    if (studentSec.getCRN().compareTo(section.getCRN()) == 0) {
+                    if (studentSec.getCRN().compareTo(loadedSection.getCRN()) == 0) {
                         System.out.println(studentSec);
 
                         studentSec.getStatus().setStyle("-fx-background-color: #baffba;");
@@ -214,7 +219,6 @@ public class App extends Application {
                     });
                     removeButton.setOnAction(e -> {
                         student.getValidSections().get(rowIndex).getStatus().setStyle("-fx-background-color: #F5F5F5;");
-                        // setStyle(null);
                         table.getSelectionModel().clearSelection();
                         BasketController.getInstance().removeSection(item);
                     });
