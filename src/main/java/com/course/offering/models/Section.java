@@ -132,12 +132,11 @@ public class Section implements Serializable {
 
     @Override
     public String toString() {
-        return "Section " + sectionNumber + " Course " + courseFullName + "\n";
-        // return "Course " + courseName + " Section " + sectionNumber + " Activity " +
-        // activity +
-        // " CRN " + CRN + " Course Name " + courseFullName + " Instructor " +
-        // instructor +
-        // " Day " + days + " Time " + time + " location " + location;
+        return "Course " + courseName + " Section " + sectionNumber + " Activity " +
+                activity +
+                " CRN " + CRN + " Course Name " + courseFullName + " Instructor " +
+                instructor +
+                " Day " + days + " Time " + time + " location " + location;
     }
 
     public Button createBaskeButton() {
