@@ -211,7 +211,7 @@ public class Section implements Serializable {
 
     // Check for conflicts
     public boolean isConflict(Section section) {
-        if (getCRN().equals(section.getCRN()))
+        if (getCRN().equals(section.getCRN()) && getActivity().equals(section.getActivity()))
             return true;
         // Same course and same type of activity
         if (getCourseName().equals(section.getCourseName()))
