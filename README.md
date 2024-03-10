@@ -2,7 +2,7 @@
 
 ## What is this?
 
-This is a very secret project that the university definitly did not require from us to pass the ICS108 course.
+This is a very secret project that is built using JavaFX in one week, that the university definitly did not require from us to pass the ICS108 course.
 
 ## Why do I care?
 
